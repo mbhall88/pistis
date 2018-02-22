@@ -2,14 +2,15 @@
 
 """Main module."""
 from __future__ import division
-import glob
-import os
 import pyfastaq
+import os
 import seaborn as sns
 from metis import utils, plots
 import click
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+SEABORN_STYLE = 'whitegrid'
+REQUIRED_EXT = '.pdf'
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
@@ -40,21 +41,40 @@ def main(fastq, output, kind, log_length):
 
     FASTQ: Fastq file to plot. This can be gzipped.
     """
-    sns.set(style='whitegrid')
-    fname = glob.glob('../../nanotest/*.fastq.gz')[0]
-    fastq = pyfastaq.sequences.file_reader(fname, read_quals=True)
+    sns.set(style=SEABORN_STYLE)
+
+    # read in the fastq file to a generator object
+    fastq_file = pyfastaq.sequences.file_reader(fastq, read_quals=True)
+
+    # collect the data needed for plotting
     (gc_content,
      read_lengths,
      mean_quality_scores,
-     df_start, df_end) = utils.collect_fastq_data(fastq)
+     df_start,
+     df_end) = utils.collect_fastq_data(fastq_file)
 
-    save_as = 'foo.pdf'
+    # if the specified output is a directory, default pdf name is fastq name.
+    if os.path.isdir(output):
+        # get the basename of the fastq file and add pdf extension
+        basename = os.path.splitext(os.path.basename(fastq))[0]
+        filename = basename + REQUIRED_EXT
+        save_as = os.path.join(output, filename)
+    else:  # if file name is provided in output, make sure it has correct ext.
+        extension = os.path.splitext(output)
+        if extension.lower() != REQUIRED_EXT:
+            save_as = output + REQUIRED_EXT
+        else:
+            save_as = output
 
+    # generate plots and save
     plot1 = plots.gc_plot(gc_content)
-    plot2 = plots.length_vs_qual_plot(read_lengths, mean_quality_scores)
+    plot2 = plots.length_vs_qual_plot(read_lengths, mean_quality_scores,
+                                      log_length=log_length, kind=kind)
     plot3 = plots.quality_per_position(df_start, 'start')
     plot4 = plots.quality_per_position(df_end, 'end')
     plots.save_plots_to_pdf([plot1, plot2, plot3, plot4], save_as)
+
+    return 0
 
 
 if __name__ == "__main__":

@@ -14,7 +14,6 @@ numpy = "*"
 pandas = "*"
 pyfastaq = "*"
 "e1839a8" = {path = ".", editable = true}
-scipy = "*"
 
 
 [dev-packages]
@@ -27,3 +26,4 @@ coverage = "==4.5.1"
 sphinx = "==1.7.0"
 pytest = "==3.4.1"
 pytest-runner = "==2.11.1"
+"e1839a8" = {path = ".", editable = true}
