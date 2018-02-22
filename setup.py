@@ -11,7 +11,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=6.0', ]
+requirements = ['Click>=6.0', 'numpy', 'pandas', 'matplotlib', 'seaborn',
+                'pyfastaq']
 
 setup_requirements = ['pytest-runner', ]
 
@@ -35,7 +36,7 @@ setup(
     description="Quality control plotting for long reads",
     entry_points={
         'console_scripts': [
-            'metis=metis.cli:main',
+            'metis=metis.metis:main',
         ],
     },
     install_requires=requirements,

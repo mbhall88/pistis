@@ -12,6 +12,9 @@ matplotlib = "*"
 seaborn = "*"
 numpy = "*"
 pandas = "*"
+pyfastaq = "*"
+"e1839a8" = {path = ".", editable = true}
+scipy = "*"
 
 
 [dev-packages]

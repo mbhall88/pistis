@@ -4,44 +4,42 @@
 from __future__ import division
 import glob
 import os
-import argparse
 import pyfastaq
 import seaborn as sns
-import utils, plots
+from metis import utils, plots
+import click
+
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 
-def parse_arguments():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "fastq",
-        help="Fastq file to generate plots for. Can be gzipped.",
-        type=str)
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.argument('fastq', nargs=1,
+                type=click.Path(exists=True, dir_okay=False, resolve_path=True))
+@click.option('--output', '-o',
+              type=click.Path(dir_okay=True, resolve_path=True),
+              help="Filepath to save the plot PDF as. If name is not specified,"
+                   " will use the name of the fastq file with .pdf extension.")
+@click.option('--kind', '-k', default='kde',
+              type=click.Choice(['kde', 'scatter', 'hex']),
+              help="The kind of representation to use for the jointplot of "
+                   "quality score vs read length. Suggested kinds are 'scatter', "
+                   "'kde' (default), or 'hex'. For examples of these refer to "
+                   "https://seaborn.pydata.org/generated/seaborn.jointplot.html")
+@click.option('--log_length/--no_log_length', default=True,
+              help="Plot the read length as a log10 transformation on the "
+                   "quality vs read length plot")
+def main(fastq, output, kind, log_length):
+    """A package for sanity checking (quality control) your long read data.
+        Feed it a fastq file and in return you will receive a PDF with four plots:\n
+            1. GC content histogram with distribution curve for sample.\n
+            2. Jointplot showing the read length vs. phred quality score for each
+            read. The interior representation of this plot can be altered with the
+            --kind option.\n
+            3. Violin plot of the phred quality score at positional bins across all reads. The reads are binned into read positions 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11-20, 21-50, 51-100, 101-200, 201-300, 301-1000, 1001-10000, and >10000. Plots from the start to the end of reads.\n
+            4. Same as 3, but plots from the end of the read to the start.\n
 
-    parser.add_argument(
-        "-o", "--output",
-        help="Where to save PDF of plots.",
-        type=str,
-        default=os.curdir)
-
-    parser.add_argument(
-        "--no_log_length",
-        action='store_true',
-        help="Plot length - on quality vs. read length plot - without log10 "
-             "transformation.")
-
-    return parser.parse_args()
-
-
-
-
-
-
-
-
-
-
-
-def main():
+    FASTQ: Fastq file to plot. This can be gzipped.
+    """
     sns.set(style='whitegrid')
     fname = glob.glob('../../nanotest/*.fastq.gz')[0]
     fastq = pyfastaq.sequences.file_reader(fname, read_quals=True)
@@ -59,4 +57,7 @@ def main():
     plots.save_plots_to_pdf([plot1, plot2, plot3, plot4], save_as)
 
 
+if __name__ == "__main__":
+    import sys
 
+    sys.exit(main())
