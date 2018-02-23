@@ -23,6 +23,9 @@ def small_fastq() -> iter:
 
     return iter(records)
 
+@pytest.fixture
+def 
+
 
 def test_collect_fastq_data():
     """Test the collect_fastq_data function in utils module."""
@@ -49,7 +52,7 @@ def test_collect_fastq_data():
     fastq = small_fastq()
     (gc_content, read_lengths,
      mean_quality_scores, df_start, df_end) = utils.collect_fastq_data(fastq)
-    
+
     assert all(x == y
                for x, y in zip(correct_lengths, read_lengths))
     assert all(pytest.approx(x) == y
@@ -71,3 +74,6 @@ def test_collect_fastq_data():
     assert all(x == y
                for x, y in zip(correct_df_end_pos_11_20, df_end['11-20']))
 
+
+def test_bin_quality_scores_by_position():
+    """Test the bin_quality_scores_by_position function from utils module."""
