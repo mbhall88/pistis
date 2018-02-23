@@ -17,7 +17,7 @@ REQUIRED_EXT = '.pdf'
 @click.argument('fastq', nargs=1,
                 type=click.Path(exists=True, dir_okay=False, resolve_path=True))
 @click.option('--output', '-o',
-              type=click.Path(dir_okay=True, resolve_path=True),
+              type=click.Path(dir_okay=True, resolve_path=True, writable=True),
               help="Filepath to save the plot PDF as. If name is not specified,"
                    " will use the name of the fastq file with .pdf extension.")
 @click.option('--kind', '-k', default='kde',
@@ -56,7 +56,11 @@ def main(fastq, output, kind, log_length):
     # if the specified output is a directory, default pdf name is fastq name.
     if os.path.isdir(output):
         # get the basename of the fastq file and add pdf extension
-        basename = os.path.splitext(os.path.basename(fastq))[0]
+        basename, ext = os.path.splitext(os.path.basename(fastq))
+        # if file is gzipped, need to also strip fastq extension
+        if ext == '.gz':
+            basename = os.path.splitext(os.path.basename(basename))[0]
+
         filename = basename + REQUIRED_EXT
         save_as = os.path.join(output, filename)
     else:  # if file name is provided in output, make sure it has correct ext.
