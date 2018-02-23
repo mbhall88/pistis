@@ -80,4 +80,3 @@ def test_bin_quality_scores_by_position():
     assert all(x == y for x, y in zip(data['1'], [1.0, 3.0]))
     assert all(x == y for x, y in zip(data['3'], [5.0]))
     assert data['8'].isnull().all()
-    
