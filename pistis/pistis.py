@@ -60,7 +60,7 @@ def main(fastq, output, kind, log_length):
         filename = basename + REQUIRED_EXT
         save_as = os.path.join(output, filename)
     else:  # if file name is provided in output, make sure it has correct ext.
-        extension = os.path.splitext(output)
+        extension = os.path.splitext(output)[-1]
         if extension.lower() != REQUIRED_EXT:
             save_as = output + REQUIRED_EXT
         else:
