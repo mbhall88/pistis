@@ -5,7 +5,7 @@ from __future__ import division
 import pyfastaq
 import os
 import seaborn as sns
-from metis import utils, plots
+from pistis import utils, plots
 import click
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])

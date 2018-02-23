@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use metis in a project::
+To use pistis in a project::
 
-    import metis
+    import pistis

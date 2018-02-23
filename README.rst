@@ -1,16 +1,16 @@
 =====
-metis
+pistis
 =====
 
 
-.. image:: https://img.shields.io/pypi/v/metis.svg
-        :target: https://pypi.python.org/pypi/metis
+.. image:: https://img.shields.io/pypi/v/pistis.svg
+        :target: https://pypi.python.org/pypi/pistis
 
-.. image:: https://img.shields.io/travis/mbhall88/metis.svg
-        :target: https://travis-ci.org/mbhall88/metis
+.. image:: https://img.shields.io/travis/mbhall88/pistis.svg
+        :target: https://travis-ci.org/mbhall88/pistis
 
-.. image:: https://readthedocs.org/projects/metis/badge/?version=latest
-        :target: https://metis.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/pistis/badge/?version=latest
+        :target: https://pistis.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 
@@ -20,7 +20,7 @@ Quality control plotting for long reads
 
 
 * Free software: MIT license
-* Documentation: https://metis.readthedocs.io.
+* Documentation: https://pistis.readthedocs.io.
 
 
 Features

@@ -1,4 +1,4 @@
-Welcome to metis's documentation!
+Welcome to pistis's documentation!
 ======================================
 
 .. toctree::
