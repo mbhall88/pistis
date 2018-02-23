@@ -24,7 +24,7 @@ def small_fastq() -> iter:
     return iter(records)
 
 @pytest.fixture
-def 
+def
 
 
 def test_collect_fastq_data():
@@ -77,3 +77,8 @@ def test_collect_fastq_data():
 
 def test_bin_quality_scores_by_position():
     """Test the bin_quality_scores_by_position function from utils module."""
+    test_list = [[1, 2], [3, 4, 5]]
+    data = utils.bin_quality_scores_by_position(test_list, shape=(4, 5))
+
+    assert all(x == y for x, y in zip(data['1'], [1.0, 3.0]))
+    assert all(x == y for x, y in zip(data['3'], [5.0]))
