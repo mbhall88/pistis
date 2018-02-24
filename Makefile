@@ -26,10 +26,6 @@ export PRINT_HELP_PYSCRIPT
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
-init:
-    pip3 install pipenv
-    pipenv install --dev
-
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
@@ -52,6 +48,10 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .tox/
 	rm -f .coverage
 	rm -fr htmlcov/
+
+init: ## install pipenv
+	pip3 install pipenv
+	pipenv install --dev
 
 lint: ## check style with flake8
 	flake8 pistis tests
