@@ -1,9 +1,12 @@
+"""This module contains functions to aid in the parsing of data into the
+formats required to produce the quality plots for `pistis`.
+"""
 from __future__ import division
 from __future__ import absolute_import
 from typing import List, Tuple, Iterable
+import collections
 import numpy as np
 import pandas as pd
-import collections
 from six.moves import zip
 
 
