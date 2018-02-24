@@ -1,13 +1,14 @@
-# -*- coding: utf-8 -*-
-
-"""Main module."""
+"""Main module. This module creates the command line interface for `pistis` and
+coordinates reading in data, running functions from the `utils` module to
+parse the data into the form required by the `plots` module. It then plots this
+data and writes it to a PDF report."""
 from __future__ import division
 from __future__ import absolute_import
-import pyfastaq
 import os
+import pyfastaq
 import seaborn as sns
-from pistis import utils, plots
 import click
+from pistis import utils, plots
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 SEABORN_STYLE = 'whitegrid'
