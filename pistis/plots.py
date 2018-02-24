@@ -2,10 +2,15 @@
 `pistis` and also for saving those plots into a single PDF document.
 """
 from __future__ import absolute_import
+import os
 from typing import List
 import seaborn as sns
 import numpy as np
 import pandas as pd
+import matplotlib as mpl
+if os.environ.get('DISPLAY','') == '':
+    print('no display found. Using non-interactive Agg backend')
+    mpl.use('Agg')
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from six.moves import map
