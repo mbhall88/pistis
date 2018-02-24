@@ -1,8 +1,10 @@
 from __future__ import division
+from __future__ import absolute_import
 from typing import List, Tuple, Iterable
 import numpy as np
 import pandas as pd
 import collections
+from six.moves import zip
 
 
 def bin_quality_scores_by_position(quality_scores: List[List[float]],
