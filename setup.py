@@ -16,7 +16,7 @@ requirements = ['Click>=6.0', 'numpy', 'pandas', 'matplotlib', 'seaborn',
 
 setup_requirements = ['pytest-runner', ]
 
-test_requirements = ['pytest', ]
+test_requirements = ['pytest', 'click', 'pandas', 'pyfastaq', 'six']
 
 setup(
     author="Michael Benjamin Hall",

@@ -14,7 +14,7 @@ DPI = 300  # resolution for plots
 FIGURE_SIZE = (11.7, 10)
 
 
-def gc_plot(gc_content: List[float]) -> plt.Figure:
+def gc_plot(gc_content):
     """Generate a histogram with density curve over it for GC content of sample.
 
     Args:
@@ -41,8 +41,11 @@ def gc_plot(gc_content: List[float]) -> plt.Figure:
     return fig
 
 
-def length_vs_qual_plot(lengths: List[int], quality_scores: List[float],
-                        kind='kde', log_length=True) -> plt.Figure:
+gc_plot.__annotations__ = {'gc_content': List[float],
+                           'return': plt.Figure}
+
+
+def length_vs_qual_plot(lengths, quality_scores, kind='kde', log_length=True):
     """Generates a plot of the read length against quality score for each read.
 
     Args:
@@ -85,7 +88,14 @@ def length_vs_qual_plot(lengths: List[int], quality_scores: List[float],
     return plot.fig
 
 
-def quality_per_position(data: pd.DataFrame, from_end='start') -> plt.Figure:
+length_vs_qual_plot.__annotations__ = {'lengths': List[int],
+                                       'quality_scores': List[float],
+                                       'kind': str,
+                                       'log_length': bool,
+                                       'return': plt.Figure}
+
+
+def quality_per_position(data, from_end='start'):
     """Generate a violin plot of quality scores across positions in all reads.
     Each violin in the plot corresponds to a 'bin'. That is, all quality scores
     at that position (or positions if it is a range) across all reads.
@@ -121,7 +131,12 @@ def quality_per_position(data: pd.DataFrame, from_end='start') -> plt.Figure:
     return fig
 
 
-def save_plots_to_pdf(plots: List[plt.Figure], filename: str):
+quality_per_position.__annotations__ = {'data': pd.DataFrame,
+                                        'from_end': str,
+                                        'return': plt.Figure}
+
+
+def save_plots_to_pdf(plots, filename):
     """Saves a list of given plots to a single PDF document.
 
     Args:
@@ -135,3 +150,8 @@ def save_plots_to_pdf(plots: List[plt.Figure], filename: str):
         pdf_doc.savefig(plot)
 
     pdf_doc.close()
+
+
+save_plots_to_pdf.__annotations__ = {'plots': List[plt.Figure],
+                                     'filename': str,
+                                     'return': None}

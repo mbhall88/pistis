@@ -14,9 +14,7 @@ TEST_FASTQ = glob.glob('tests/data/*fastq*')[0]
 
 
 @pytest.fixture
-def get_test_data() -> Tuple[List[float], List[int],
-                             List[float], pd.DataFrame,
-                             pd.DataFrame]:
+def get_test_data():
     """Generate a very small fastq dataset to use for plotting.
 
     Returns:
@@ -30,6 +28,11 @@ def get_test_data() -> Tuple[List[float], List[int],
             break
         records.append(copy.copy(read))
     return utils.collect_fastq_data(iter(records))
+
+
+get_test_data.__annotations__ = {'return': Tuple[List[float], List[int],
+                                                 List[float], pd.DataFrame,
+                                                 pd.DataFrame]}
 
 
 def test_gc_plot():
