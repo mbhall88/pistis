@@ -10,8 +10,7 @@ import pandas as pd
 from six.moves import zip
 
 
-def bin_quality_scores_by_position(quality_scores: List[List[float]],
-                                   shape: Tuple[int, int]) -> pd.DataFrame:
+def bin_quality_scores_by_position(quality_scores, shape):
     """Bins quality scores based on their position in the sequence.
 
     Args:
@@ -61,9 +60,14 @@ def bin_quality_scores_by_position(quality_scores: List[List[float]],
     return pd.DataFrame.from_dict(data)
 
 
-def collect_fastq_data(fastq: Iterable) -> Tuple[List[float], List[int],
-                                                 List[float], pd.DataFrame,
-                                                 pd.DataFrame]:
+bin_quality_scores_by_position.__annotations__ = {
+    'quality_scores': List[List[float]],
+    'shape': Tuple[int, int],
+    'return': pd.DataFrame
+}
+
+
+def collect_fastq_data(fastq):
     """Given a fastq filename, gets the GC content, mean quality scores, read
     length, and quality at certain positional bins - for each read.
 
@@ -111,3 +115,9 @@ def collect_fastq_data(fastq: Iterable) -> Tuple[List[float], List[int],
     df_end = bin_quality_scores_by_position(reversed_quality_scores, shape)
 
     return gc_content, read_lengths, mean_quality_scores, df_start, df_end
+
+
+collect_fastq_data.__annotations__ = {'fastq': Iterable,
+                                      'return': Tuple[List[float], List[int],
+                                                      List[float], pd.DataFrame,
+                                                      pd.DataFrame]}

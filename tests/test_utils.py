@@ -11,7 +11,7 @@ TEST_FASTQ = glob.glob('tests/data/*fastq*')[0]
 
 
 @pytest.fixture
-def small_fastq() -> iter:
+def small_fastq():
     """Returns 5 records from test fastq file as an iterator.
 
     Returns:
@@ -25,6 +25,9 @@ def small_fastq() -> iter:
             records.append(copy.copy(read))
 
     return iter(records)
+
+
+small_fastq.__annotations__ = {'return': iter}
 
 
 def test_collect_fastq_data():

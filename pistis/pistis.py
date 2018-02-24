@@ -83,6 +83,12 @@ def main(fastq, output, kind, log_length):
     return 0
 
 
+main.__annotations__ = {'fastq': click.Path,
+                        'output': click.Path,
+                        'kind': str,
+                        'log_length': bool,
+                        'return': int}
+
 if __name__ == "__main__":
     import sys
 
