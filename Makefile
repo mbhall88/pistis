@@ -50,7 +50,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 
 init: ## install pipenv
-	pip3 install pipenv
+	pip install pipenv
 	pipenv install --dev
 
 lint: ## check style with flake8
