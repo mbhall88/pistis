@@ -1,8 +1,11 @@
+"""Tests for the utils module."""
+from __future__ import absolute_import
 import glob
 import copy
 import pytest
 import pyfastaq
 from pistis import utils
+from six.moves import zip
 
 TEST_FASTQ = glob.glob('tests/data/*fastq*')[0]
 

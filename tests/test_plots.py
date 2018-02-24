@@ -1,3 +1,5 @@
+"""Test functionality of the plots module."""
+from __future__ import absolute_import
 import pytest
 import glob
 import os
@@ -73,7 +75,7 @@ def test_quality_per_position():
 def test_save_plots_to_pdf():
     """Test generation of PDF document containing all plots."""
     fname = os.path.join(IMG_DIR, 'report.pdf')
-    expected_fname = os.path.join(IMG_DIR, 'report-expected.pdf')
+    # expected_fname = os.path.join(IMG_DIR, 'report-expected.pdf')
     (gc_content,
      read_lengths,
      mean_quality_scores,

@@ -1,11 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """Tests for `pistis` package."""
-import pytest
-
+from __future__ import absolute_import
 from click.testing import CliRunner
-
 from pistis import pistis
 
 
@@ -42,20 +37,3 @@ def test_command_line_interface():
     assert bad_kind_result.exit_code == 2
     assert ('invalid choice: hownowbrowncow. (choose from kde, scatter, hex)'
             in bad_kind_result.output)
-
-
-
-
-# examples
-# def test_named_hello(runner):
-#     result = runner.invoke(hll.main, ['--name','Amy'])
-#     assert result.exit_code == 0
-#     assert result.output == 'Hello Amy!\n'
-#
-#
-# def test_default_hello(runner):
-#     result = runner.invoke(hll.main, input='\n')
-#     assert result.exit_code == 0
-#     print(result.output)
-#     expected = 'greet whom? [world]: \nHello world!\n'
-#     assert result.output == expected

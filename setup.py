@@ -12,7 +12,7 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = ['Click>=6.0', 'numpy', 'pandas', 'matplotlib', 'seaborn',
-                'pyfastaq']
+                'pyfastaq', 'six']
 
 setup_requirements = ['pytest-runner', ]
 
