@@ -26,6 +26,10 @@ export PRINT_HELP_PYSCRIPT
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
+init:
+    pip3 install pipenv
+    pipenv install --dev
+
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
@@ -53,10 +57,10 @@ lint: ## check style with flake8
 	flake8 pistis tests
 
 test: ## run tests quickly with the default Python
-	py.test
+	pipenv run pytest
 
 test-all: ## run tests on every Python version with tox
-	tox
+	pipenv run tox
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source pistis -m pytest
