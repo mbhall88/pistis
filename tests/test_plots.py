@@ -70,3 +70,18 @@ def test_quality_per_position():
             open(fname_end, 'rb').read())
 
 
+def test_save_plots_to_pdf():
+    """Test generation of PDF document containing all plots."""
+    fname = os.path.join(IMG_DIR, 'report.pdf')
+    expected_fname = os.path.join(IMG_DIR, 'report-expected.pdf')
+    (gc_content,
+     read_lengths,
+     mean_quality_scores,
+     df_start,
+     df_end) = get_test_data()
+    plot1 = plots.gc_plot(gc_content)
+    plot2 = plots.length_vs_qual_plot(read_lengths, mean_quality_scores)
+    plot3 = plots.quality_per_position(df_start)
+    plot4 = plots.quality_per_position(df_end, from_end='end')
+    plots.save_plots_to_pdf([plot1, plot2, plot3, plot4], fname)
+    assert open(fname, 'rb').read() == open(expected_fname, 'rb').read()

@@ -6,7 +6,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from typing import List
 
 DPI = 300  # resolution for plots
-FIGURE_SIZE = (11.7, 8.27)  # A4 size
+FIGURE_SIZE = (11.7, 10)
 
 
 def gc_plot(gc_content: List[float]) -> plt.Figure:
@@ -57,7 +57,6 @@ def length_vs_qual_plot(lengths: List[int], quality_scores: List[float],
                         rc={"grid.linewidth": 0.5, 'grid.linestyle': '--'}):
         xlabel = 'Read Length (bp)'
         ylabel = 'Phred quality score'
-        size = (8, 8)  # if you use A4 the axes seem to run off the PDF
 
         # jointplot require numpy array
         x_data = np.array(lengths)
@@ -75,7 +74,7 @@ def length_vs_qual_plot(lengths: List[int], quality_scores: List[float],
             p.ax_joint.set_xticks(np.log10(log_ticks))
             p.ax_joint.set_xticklabels(map(int, log_ticks), rotation=270)
 
-        p.fig.set(dpi=DPI, size_inches=size)
+        p.fig.set(dpi=DPI, size_inches=FIGURE_SIZE)
 
     return p.fig
 
