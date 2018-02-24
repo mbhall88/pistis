@@ -1,10 +1,13 @@
+"""This module contains methods for making the quality control plots for
+`pistis` and also for saving those plots into a single PDF document.
+"""
 from __future__ import absolute_import
+from typing import List
 import seaborn as sns
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
-from typing import List
 from six.moves import map
 
 DPI = 300  # resolution for plots
@@ -67,18 +70,19 @@ def length_vs_qual_plot(lengths: List[int], quality_scores: List[float],
         if log_length:
             x_data = np.log10(x_data)
 
-        p = sns.jointplot(x=x_data, y=y_data, kind=kind, space=0, size=3)
-        p.set_axis_labels(xlabel=xlabel, ylabel=ylabel)
+        plot = sns.jointplot(x=x_data, y=y_data, kind=kind, space=0, size=3)
+        plot.set_axis_labels(xlabel=xlabel, ylabel=ylabel)
 
         if log_length:  # format x-axis labels and ticks for log data
             log_ticks = [500, 1e3, 3e3, 5e3, 1e4, 3e4, 5e4, 1e5, 3e5, 5e5, 1e6,
                          1.5e6]
-            p.ax_joint.set_xticks(np.log10(log_ticks))
-            p.ax_joint.set_xticklabels(list(map(int, log_ticks)), rotation=270)
+            plot.ax_joint.set_xticks(np.log10(log_ticks))
+            plot.ax_joint.set_xticklabels(list(map(int, log_ticks)),
+                                          rotation=270)
 
-        p.fig.set(dpi=DPI, size_inches=FIGURE_SIZE)
+        plot.fig.set(dpi=DPI, size_inches=FIGURE_SIZE)
 
-    return p.fig
+    return plot.fig
 
 
 def quality_per_position(data: pd.DataFrame, from_end='start') -> plt.Figure:
