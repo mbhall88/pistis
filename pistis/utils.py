@@ -25,11 +25,10 @@ def bin_quality_scores_by_position(quality_scores):
 
     """
     bin_names = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11-20',
-                 '21-50', '51-100', '101-200', '201-300', '301-1000',
-                 '1001-10000', '>10000']
+                 '21-50', '51-100', '101-200', '201-300', '301-1000']
     # Array holding the starting index for each bin.
     bin_starts = np.append(np.arange(11),
-                           np.array([21, 51, 101, 201, 301, 1001, 10001, None]))
+                           np.array([21, 51, 101, 201, 301, 1001]))
 
     bins = collections.OrderedDict()
     for read_scores in quality_scores:

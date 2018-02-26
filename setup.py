@@ -11,12 +11,12 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=6.0', 'numpy', 'pandas', 'matplotlib', 'seaborn',
+requirements = ['Click>=6.0', 'numpy', 'matplotlib', 'seaborn',
                 'pyfastaq', 'six']
 
 setup_requirements = ['pytest-runner', ]
 
-test_requirements = ['pytest', 'click', 'pandas', 'pyfastaq', 'six',
+test_requirements = ['pytest', 'click', 'pyfastaq', 'six',
                      'matplotlib']
 
 setup(

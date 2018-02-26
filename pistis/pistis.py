@@ -17,16 +17,18 @@ REQUIRED_EXT = '.pdf'
 
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('fastq', nargs=1,
-                type=click.Path(exists=True, dir_okay=False, resolve_path=True))
+                type=click.Path(exists=True, dir_okay=False,
+                                resolve_path=True))
 @click.option('--output', '-o',
-              type=click.Path(dir_okay=True, resolve_path=True, writable=True),
-              help="Filepath to save the plot PDF as. If name is not specified,"
+              type=click.Path(dir_okay=True, resolve_path=True,
+                              writable=True),
+              help="Path to save the plot PDF as. If name is not specified,"
                    " will use the name of the fastq file with .pdf extension.")
 @click.option('--kind', '-k', default='kde',
               type=click.Choice(['kde', 'scatter', 'hex']),
               help="The kind of representation to use for the jointplot of "
-                   "quality score vs read length. Suggested kinds are 'scatter', "
-                   "'kde' (default), or 'hex'. For examples of these refer to "
+                   "quality score vs read length. Accepted kinds are 'scatter'"
+                   ", 'kde' (default), or 'hex'. For examples refer to "
                    "https://seaborn.pydata.org/generated/seaborn.jointplot.html")
 @click.option('--log_length/--no_log_length', default=True,
               help="Plot the read length as a log10 transformation on the "
