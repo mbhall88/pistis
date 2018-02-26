@@ -2,17 +2,11 @@
 `pistis` and also for saving those plots into a single PDF document.
 """
 from __future__ import absolute_import
-import os
 from typing import List
+import collections
 import seaborn as sns
 import numpy as np
-import pandas as pd
-import matplotlib as mpl
-if os.environ.get('DISPLAY','') == '':
-    print('no display found. Using non-interactive Agg backend')
-    mpl.use('Agg')
-    from matplotlib import pyplot as plt
-    plt.ioff()
+from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from six.moves import map
 
@@ -107,7 +101,7 @@ def quality_per_position(data, from_end='start'):
     at that position (or positions if it is a range) across all reads.
 
     Args:
-        data: A Pandas DataFrame where the columns are positions in the reads
+        data: An ordered dictionary where the keys are positions in the reads
         and the values are the quality scores at those positions.
         from_end: Which end of the read to plot from. 'start' or 'end'.
 
@@ -115,9 +109,11 @@ def quality_per_position(data, from_end='start'):
         A matplotlib figure object containing the plot.
     """
     if from_end.lower() == 'start':
-        col_names = data.columns
+        col_names = list(data.keys())
+        values = list(data.values())
     elif from_end.lower() == 'end':
-        col_names = data.columns[::-1]
+        col_names = list(data.keys())[::-1]
+        values = list(data.values())[::-1]
     else:
         raise Exception("'start' and 'end' are the only options allowed for "
                         "plotting quality per position.")
@@ -128,16 +124,16 @@ def quality_per_position(data, from_end='start'):
     cut = 0  # cuts the violin plot at max and min values (doesn't extrapolate)
 
     fig, axes = plt.subplots(figsize=FIGURE_SIZE, dpi=DPI)
-    plot = sns.violinplot(data=data, ax=axes, order=col_names,
+    plot = sns.violinplot(data=values, ax=axes,
                           cut=cut, linewidth=0.5)
     plot.set(xlabel=xlabel, ylabel=ylabel, title=title)
-    plot.set_xticklabels(plot.get_xticklabels(), rotation=45)
+    plot.set_xticklabels(col_names, rotation=45)
     sns.despine()
 
     return fig
 
 
-quality_per_position.__annotations__ = {'data': pd.DataFrame,
+quality_per_position.__annotations__ = {'data': collections.OrderedDict,
                                         'from_end': str,
                                         'return': plt.Figure}
 

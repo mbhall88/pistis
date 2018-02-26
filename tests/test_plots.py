@@ -5,14 +5,8 @@ import glob
 import os
 import copy
 import pyfastaq
+import collections
 from typing import Tuple, List
-import pandas as pd
-import matplotlib as mpl
-if os.environ.get('DISPLAY','') == '':
-    print('no display found. Using non-interactive Agg backend')
-    mpl.use('Agg')
-    from matplotlib import pyplot as plt
-    plt.ioff()
 from pistis import utils, plots
 
 IMG_DIR = 'tests/images'
@@ -37,8 +31,9 @@ def get_test_data():
 
 
 get_test_data.__annotations__ = {'return': Tuple[List[float], List[int],
-                                                 List[float], pd.DataFrame,
-                                                 pd.DataFrame]}
+                                                 List[float],
+                                                 collections.OrderedDict,
+                                                 collections.OrderedDict]}
 
 
 def test_gc_plot():
@@ -70,9 +65,9 @@ def test_quality_per_position():
     fname_end = os.path.join(IMG_DIR, 'qual_pos_end.png')
     expected_fname_end = os.path.join(IMG_DIR, 'qual_pos_end-expected.png')
 
-    df_start, df_end = get_test_data()[3:]
-    fig_start = plots.quality_per_position(df_start)
-    fig_end = plots.quality_per_position(df_end, from_end='end')
+    bins_from_start, bins_from_end = get_test_data()[3:]
+    fig_start = plots.quality_per_position(bins_from_start)
+    fig_end = plots.quality_per_position(bins_from_end, from_end='end')
     fig_start.savefig(fname_start, format='png')
     fig_end.savefig(fname_end, format='png')
     assert (open(expected_fname_start, 'rb').read() ==

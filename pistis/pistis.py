@@ -52,8 +52,8 @@ def main(fastq, output, kind, log_length):
     (gc_content,
      read_lengths,
      mean_quality_scores,
-     df_start,
-     df_end) = utils.collect_fastq_data(fastq_file)
+     bins_from_start,
+     bins_from_end) = utils.collect_fastq_data(fastq_file)
 
     # if the specified output is a directory, default pdf name is fastq name.
     if os.path.isdir(output):
@@ -76,8 +76,8 @@ def main(fastq, output, kind, log_length):
     plot1 = plots.gc_plot(gc_content)
     plot2 = plots.length_vs_qual_plot(read_lengths, mean_quality_scores,
                                       log_length=log_length, kind=kind)
-    plot3 = plots.quality_per_position(df_start, 'start')
-    plot4 = plots.quality_per_position(df_end, 'end')
+    plot3 = plots.quality_per_position(bins_from_start, 'start')
+    plot4 = plots.quality_per_position(bins_from_end, 'end')
     plots.save_plots_to_pdf([plot1, plot2, plot3, plot4], save_as)
 
     return 0

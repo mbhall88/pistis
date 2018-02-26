@@ -28,3 +28,4 @@ pytest = "*"
 pytest-runner = "==2.11.1"
 "e1839a8" = {path = ".", editable = true}
 nose = "*"
+jupyter = "*"
