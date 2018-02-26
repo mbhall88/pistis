@@ -8,8 +8,7 @@ import pyfastaq
 import collections
 from typing import Tuple, List
 from pistis import utils, plots
-import matplotlib
-matplotlib.use('agg')
+
 
 IMG_DIR = 'tests/images'
 TEST_FASTQ = glob.glob('tests/data/*fastq*')[0]
