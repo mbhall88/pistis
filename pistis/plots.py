@@ -9,6 +9,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from six.moves import map
+import matplotlib
+matplotlib.use('agg')
 
 DPI = 300  # resolution for plots
 FIGURE_SIZE = (11.7, 10)
