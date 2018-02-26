@@ -9,8 +9,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from six.moves import map
-import matplotlib
-matplotlib.use('agg')
+# import matplotlib
+# matplotlib.use('agg')
 
 DPI = 300  # resolution for plots
 FIGURE_SIZE = (11.7, 10)
@@ -75,7 +75,8 @@ def length_vs_qual_plot(lengths, quality_scores, kind='kde', log_length=True):
         if log_length:
             x_data = np.log10(x_data)
 
-        plot = sns.jointplot(x=x_data, y=y_data, kind=kind, space=0, size=3)
+        plot = sns.jointplot(x=x_data, y=y_data, kind=kind, space=0, size=3,
+                             stat_func=None)
         plot.set_axis_labels(xlabel=xlabel, ylabel=ylabel)
 
         if log_length:  # format x-axis labels and ticks for log data
