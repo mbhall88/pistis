@@ -1,13 +1,12 @@
 """Tests for the utils module."""
 from __future__ import absolute_import
-import glob
 import copy
 import pytest
 import pyfastaq
 from pistis import utils
 from six.moves import zip
 
-TEST_FASTQ = glob.glob('tests/data/*fastq*')[0]
+TEST_FASTQ = 'tests/data/reads.fastq.gz'
 
 
 @pytest.fixture
@@ -61,28 +60,25 @@ def test_collect_fastq_data():
     assert all(pytest.approx(x) == y
                for x, y in zip(correct_gc, gc_content))
     assert all(pytest.approx(x) == y
-               for x, y in zip(correct_quality_means, mean_quality_scores))
+               for x, y in
+               zip(sorted(correct_quality_means), sorted(mean_quality_scores)))
     # test df start bins are correct
     assert all(x == y
-               for x, y in zip(correct_df_start_pos_1, df_start['1']))
+               for x, y in
+               zip(sorted(correct_df_start_pos_1), sorted(df_start['1'])))
     assert all(x == y
-               for x, y in zip(correct_df_start_pos_4, df_start['4']))
+               for x, y in
+               zip(sorted(correct_df_start_pos_4), sorted(df_start['4'])))
     assert all(x == y
-               for x, y in zip(correct_df_start_pos_11_20, df_start['11-20']))
+               for x, y in zip(sorted(correct_df_start_pos_11_20),
+                               sorted(df_start['11-20'])))
     # test df end bins are correct
     assert all(x == y
-               for x, y in zip(correct_df_end_pos_3, df_end['3']))
+               for x, y in
+               zip(sorted(correct_df_end_pos_3), sorted(df_end['3'])))
     assert all(x == y
-               for x, y in zip(correct_df_end_pos_10, df_end['10']))
+               for x, y in
+               zip(sorted(correct_df_end_pos_10), sorted(df_end['10'])))
     assert all(x == y
-               for x, y in zip(correct_df_end_pos_11_20, df_end['11-20']))
-
-
-def test_bin_quality_scores_by_position():
-    """Test the bin_quality_scores_by_position function from utils module."""
-    test_list = [[1, 2], [3, 4, 5]]
-    data = utils.bin_quality_scores_by_position(test_list)
-
-    assert all(x == y for x, y in zip(data['1'], [1.0, 3.0]))
-    assert all(x == y for x, y in zip(data['3'], [5.0]))
-    assert not data['8']
+               for x, y in
+               zip(sorted(correct_df_end_pos_11_20), sorted(df_end['11-20'])))

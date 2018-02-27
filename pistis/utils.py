@@ -4,47 +4,14 @@ formats required to produce the quality plots for `pistis`.
 from __future__ import division
 from __future__ import absolute_import
 from typing import List, Tuple, Iterable
-import collections
+from collections import OrderedDict
 import numpy as np
 from six.moves import zip
 
 
-def bin_quality_scores_by_position(quality_scores):
-    """Bins quality scores based on their position in the sequence.
-
-    Args:
-        quality_scores: list of list of Phred quality scores for a read.
-        shape: This should be the a tuple of  M x N where M is the number of
-        reads in the top level list i.e len(quality_scores) and N is the length
-        of the longest read in the fastq file.
-
-    Returns:
-        A Pandas DataFrame where each column corresponds to a postitional bin
-        and the values in that column are quality scores for all reads at that
-        position(s).
-
-    """
-    bin_names = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11-20',
-                 '21-50', '51-100', '101-200']
-    # Array holding the starting index for each bin.
-    bin_starts = np.append(np.arange(11),
-                           np.array([21, 51, 101, 201]))
-
-    bins = collections.OrderedDict()
-    for read_scores in quality_scores:
-        for i, (start_idx, bin_name) in enumerate(zip(bin_starts[:-1],
-                                                      bin_names)):
-            if bin_name not in bins.keys():
-                bins[bin_name] = []
-            bins[bin_name].extend(read_scores[start_idx: bin_starts[i + 1]])
-
-    return bins
-
-
-bin_quality_scores_by_position.__annotations__ = {
-    'quality_scores': List[List[float]],
-    'return': collections.OrderedDict
-}
+BIN_NAMES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11-20',
+             '21-50', '51-100', '101-200', '201-300']
+BIN_STARTS = np.append(np.arange(11), np.array([21, 51, 101, 201, 301]))
 
 
 def collect_fastq_data(fastq):
@@ -60,36 +27,31 @@ def collect_fastq_data(fastq):
             for a read.
             - List of lengths for each read.
             - List where each value is the mean Phred quality score for a read.
-            - A Pandas DataFrame where each column corresponds to a postitional
-            bin and the values in that column are quality scores for all reads
-            at that position(s) from the start of each read.
-            - A Pandas DataFrame where each column corresponds to a postitional
-            bin and the values in that column are quality scores for all reads
-            at that position(s) from the end of each read.
+            - An ordered dictionary where each key corresponds to a postitional
+            bin and the values are quality scores for all reads at that
+            position(s) from the start of each read.
+            - An ordered dictionary where each key corresponds to a postitional
+            bin and the values are quality scores for all reads at that
+            position(s) from the end of each read.
     """
     gc_content = []
     read_lengths = []
     mean_quality_scores = []
-    all_quality_scores = []
-    longest_read = 0
+    bins_from_start = OrderedDict((name, []) for name in BIN_NAMES)
+    bins_from_end = OrderedDict((name, []) for name in BIN_NAMES)
     for record in fastq:
         gc_content.append(record.gc_content(as_decimal=False))
         length = len(record.seq)
         read_lengths.append(length)
         __, q_scores = record.to_Fasta_and_qual()
-        all_quality_scores.append(q_scores)
         mean_quality_scores.append(sum(q_scores) / length)
-        if length > longest_read:
-            longest_read = length
-
-    # dataframe of quality scores at each positional bin from start of read
-    bins_from_start = bin_quality_scores_by_position(all_quality_scores)
-
-    # reverse each list within the list of all quality scores so as to get the
-    # dataframe of quality scores at each positional bin from the END of reads
-    reversed_quality_scores = [[score for score in read_scores[::-1]]
-                               for read_scores in all_quality_scores]
-    bins_from_end = bin_quality_scores_by_position(reversed_quality_scores)
+        # bin the quality scores for the read from start and end by position
+        for i, (start_idx, bin_name) in enumerate(zip(BIN_STARTS[:-1],
+                                                      BIN_NAMES)):
+            slice_from_start = q_scores[start_idx: BIN_STARTS[i + 1]]
+            slice_from_end = q_scores[-BIN_STARTS[i + 1]: -start_idx or None]
+            bins_from_start[bin_name].extend(slice_from_start)
+            bins_from_end[bin_name].extend(slice_from_end)
 
     return (gc_content, read_lengths, mean_quality_scores, bins_from_start,
             bins_from_end)
@@ -97,6 +59,5 @@ def collect_fastq_data(fastq):
 
 collect_fastq_data.__annotations__ = {'fastq': Iterable,
                                       'return': Tuple[List[float], List[int],
-                                                      List[float],
-                                                      collections.OrderedDict,
-                                                      collections.OrderedDict]}
+                                                      List[float], OrderedDict,
+                                                      OrderedDict]}

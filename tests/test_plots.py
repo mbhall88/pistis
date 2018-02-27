@@ -1,7 +1,6 @@
 """Test functionality of the plots module."""
 from __future__ import absolute_import
 import pytest
-import glob
 import os
 import copy
 import pyfastaq
@@ -12,7 +11,7 @@ from pistis import utils, plots
 # matplotlib.use('agg')
 
 IMG_DIR = 'tests/images'
-TEST_FASTQ = glob.glob('tests/data/*fastq*')[0]
+TEST_FASTQ = 'tests/data/reads.fastq.gz'
 
 
 @pytest.fixture
