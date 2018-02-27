@@ -128,8 +128,7 @@ def quality_per_position(data, from_end='start'):
     cut = 0  # cuts the violin plot at max and min values (doesn't extrapolate)
 
     fig, axes = plt.subplots(figsize=FIGURE_SIZE, dpi=DPI)
-    plot = sns.violinplot(data=values, ax=axes,
-                          cut=cut, linewidth=0.5)
+    plot = sns.boxplot(data=values, ax=axes, linewidth=0.5)
     plot.set(xlabel=xlabel, ylabel=ylabel, title=title)
     plot.set_xticklabels(col_names, rotation=45)
     sns.despine()
