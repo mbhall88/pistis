@@ -6,6 +6,8 @@ from __future__ import division
 from __future__ import absolute_import
 import os
 import pyfastaq
+import matplotlib
+matplotlib.use('Agg')
 import seaborn as sns
 import click
 from pistis import utils, plots

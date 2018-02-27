@@ -4,6 +4,8 @@
 from __future__ import absolute_import
 from typing import List
 import collections
+import matplotlib
+matplotlib.use('Agg')
 import seaborn as sns
 import numpy as np
 from matplotlib import pyplot as plt
