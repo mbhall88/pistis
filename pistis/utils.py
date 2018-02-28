@@ -3,10 +3,15 @@ formats required to produce the quality plots for `pistis`.
 """
 from __future__ import division
 from __future__ import absolute_import
-from typing import List, Tuple, Iterable
+import os
+import re
+import pysam
+from typing import List, Tuple, Iterable, NewType
 from collections import OrderedDict
 import numpy as np
 from six.moves import zip
+
+Sam = NewType('Sam', pysam.AlignedSegment)
 
 
 BIN_NAMES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11-20',
@@ -61,3 +66,70 @@ collect_fastq_data.__annotations__ = {'fastq': Iterable,
                                       'return': Tuple[List[float], List[int],
                                                       List[float], OrderedDict,
                                                       OrderedDict]}
+
+
+def sam_percent_identity(filename):
+    """Opens a SAM/BAM file and extracts the read percent identity for all
+    mapped reads that are nort supplementary or secondary alignments.
+
+    Args:
+        filename: Path to SAM/BAM file.
+
+    Returns:
+        A list of the percent identity for all valid reads.
+    """
+    # get pysam read option depending on whether file is sam or bam
+    file_ext = os.path.splitext(filename)[-1]
+    read_opt = 'rb' if file_ext == '.bam' else 'r'
+
+    # open file
+    samfile = pysam.AlignmentFile(filename, read_opt)
+
+    perc_identities = []
+    for record in samfile:
+        # make sure read is mapped, and is not a suppl. or secondary alignment
+        if record.is_unmapped or record.is_supplementary or record.is_secondary:
+            continue
+        pid = get_percent_identity(record)
+        if pid:
+            perc_identities.append(pid)
+    return perc_identities
+
+
+sam_percent_identity.__annotations__ = {'filename': str, 'return': List[float]}
+
+
+def get_percent_identity(read):
+    """Calculates the percent identity of a read based on the NM tag if present
+    , if not calculate from MD tag and CIGAR string.
+
+    Args:
+        read: A read within a sam file (pysam class).
+
+    Returns:
+        The percent identity or None if required fields are not present.
+    """
+    try:
+        return 100 * (1 - read.get_tag("NM") / read.query_alignment_length)
+    except KeyError:
+        try:
+            return 100 * (1 - (_parse_md_flag(read.get_tag("MD")) + _parse_cigar(
+                read.cigartuples)) /
+                          read.query_alignment_length)
+        except KeyError:
+            return None
+    except ZeroDivisionError:
+        return None
+
+
+get_percent_identity.__annotations__ = {'read': Sam, 'return': float}
+
+
+def _parse_md_flag(md_list):
+    """Parse MD string to get number of mismatches and deletions."""
+    return sum([len(item) for item in re.split('[0-9^]', md_list)])
+
+
+def _parse_cigar(cigartuples):
+    """Count the insertions in the read using the CIGAR string."""
+    return sum([item[1] for item in cigartuples if item[0] == 1])

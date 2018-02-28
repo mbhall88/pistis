@@ -29,7 +29,7 @@ def gc_plot(gc_content):
     """
     bins = 100
     xlabel = 'GC content'
-    ylabel = 'Number of reads'
+    ylabel = 'Proportion of reads'
     title = 'GC content of each read'
     # set the x-axis limits based on whether data is decimal or percentage
     xlim = (0, 100) if any(x > 1 for x in gc_content) else (0, 1.0)
@@ -139,6 +139,42 @@ def quality_per_position(data, from_end='start'):
 quality_per_position.__annotations__ = {'data': collections.OrderedDict,
                                         'from_end': str,
                                         'return': plt.Figure}
+
+
+def percent_identity(perc_indentities):
+    """Plots read percent identity as a distribution/histogram plot.
+
+    Args:
+        perc_indentities: A list of the percentage identity figures.
+
+    Returns:
+        A matplotlib figure object containing the plot.
+    """
+    bins = 100
+    xlabel = 'Read percent identity'
+    ylabel = 'Proportion of reads'
+    title = 'Read alignment percent identity'
+
+    fig, axes = plt.subplots(dpi=DPI, figsize=FIGURE_SIZE)
+    plot = sns.distplot(perc_indentities, bins=bins, ax=axes)
+
+    # add a vertical dashed line at the median
+    median = np.median(perc_indentities)
+    plt.plot([median] * 2, [0, 1], linewidth=2, c='r', alpha=0.75,
+             linestyle='--')
+    xticks = plot.get_xticks().tolist()[1:-1]
+    xticks.append(median.round(2))
+    xticks.sort()
+    plot.set(xlabel=xlabel, ylabel=ylabel, title=title, xticks=xticks,
+             xticklabels=xticks)
+    # remove top and right border of plot
+    sns.despine()
+
+    return fig
+
+
+percent_identity.__annotations__ = {'gc_content': List[float],
+                                    'return': plt.Figure}
 
 
 def save_plots_to_pdf(plots, filename):

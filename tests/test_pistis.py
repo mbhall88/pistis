@@ -11,13 +11,15 @@ def test_command_line_interface():
         '-k, --kind [kde|scatter|hex]',
         '-o, --output PATH',
         '--log_length / --no_log_length  Plot the read length as a log10',
-        'FASTQ: Fastq file to plot.'
+        'Fastq file to plot. This can be gzipped.',
+        'SAM/BAM file to produce read percent identity'
     ]
     runner = CliRunner()
     # test cli with no args passed
     result = runner.invoke(pistis.main)
     assert result.exit_code == 2
-    assert 'Error: Missing argument "fastq"' in result.output
+    assert ('Either --fastq, --bam or both must be given as arguments.' in
+            result.output)
 
     # test cli with help passed
     help_result = runner.invoke(pistis.main, ['--help'])
@@ -26,10 +28,17 @@ def test_command_line_interface():
 
     # test cli with bad fastq path passed
     bad_fastq = '../../test.fastq'
-    bad_fastq_result = runner.invoke(pistis.main, [bad_fastq])
+    bad_fastq_result = runner.invoke(pistis.main, ['--fastq', bad_fastq])
     assert bad_fastq_result.exit_code == 2
     assert ('Path "{}" does not exist.'.format(bad_fastq)
             in bad_fastq_result.output)
+
+    # test cli with bad bam path passed
+    bad_bam = '../../bad.bam'
+    bad_bam_result = runner.invoke(pistis.main, ['--bam', bad_bam])
+    assert bad_bam_result.exit_code == 2
+    assert ('Path "{}" does not exist.'.format(bad_bam)
+            in bad_bam_result.output)
 
     # test cli with bad kind argument
     kind = 'hownowbrowncow'

@@ -13,6 +13,7 @@ seaborn = "*"
 numpy = "*"
 pyfastaq = "*"
 "e1839a8" = {path = ".", editable = true}
+pysam = "*"
 
 
 [dev-packages]

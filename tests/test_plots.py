@@ -4,14 +4,17 @@ import pytest
 import os
 import copy
 import pyfastaq
+import pysam
 import collections
 from typing import Tuple, List
+import matplotlib
+matplotlib.use('agg')
 from pistis import utils, plots
-# import matplotlib
-# matplotlib.use('agg')
+
 
 IMG_DIR = 'tests/images'
 TEST_FASTQ = 'tests/data/reads.fastq.gz'
+TEST_BAM = 'tests/data/alignment.bam'
 
 
 @pytest.fixture
@@ -35,6 +38,16 @@ get_test_data.__annotations__ = {'return': Tuple[List[float], List[int],
                                                  List[float],
                                                  collections.OrderedDict,
                                                  collections.OrderedDict]}
+
+@pytest.fixture
+def get_test_bam_data():
+    """Generate a very small bam dataset to use for plotting.
+
+    Returns:
+        A list containing percentage identity from alignment.
+    """
+    perc_identities = utils.sam_percent_identity(TEST_BAM)
+    return perc_identities
 
 
 def test_gc_plot():
@@ -78,6 +91,16 @@ def test_quality_per_position():
             open(fname_start, 'rb').read())
     assert (open(expected_fname_end, 'rb').read() ==
             open(fname_end, 'rb').read())
+
+
+def test_percent_identity():
+    """Test generation of the percent idenrtity plot."""
+    perc_identities = get_test_bam_data()
+    fig = plots.percent_identity(perc_identities)
+    fname = os.path.join(IMG_DIR, 'percent_identity.png')
+    expected_fname = os.path.join(IMG_DIR, 'percent_identity-expected.png')
+    fig.savefig(fname, format='png')
+    assert open(fname, 'rb').read() == open(expected_fname, 'rb').read()
 
 
 def test_save_plots_to_pdf():
