@@ -88,7 +88,9 @@ def sam_percent_identity(filename):
     perc_identities = []
     for record in samfile:
         # make sure read is mapped, and is not a suppl. or secondary alignment
-        if record.is_unmapped or record.is_supplementary or record.is_secondary:
+        if (record.is_unmapped or
+                record.is_supplementary or
+                record.is_secondary):
             continue
         pid = get_percent_identity(record)
         if pid:
@@ -114,9 +116,10 @@ def get_percent_identity(read):
     except KeyError:
         try:
             return 100 * (
-                        1 - (_parse_md_flag(read.get_tag("MD")) + _parse_cigar(
-                    read.cigartuples)) /
-                        read.query_alignment_length)
+                    1 - (_parse_md_flag(read.get_tag("MD")) +
+                         _parse_cigar(read.cigartuples)) /
+                    read.query_alignment_length
+            )
         except KeyError:
             return None
     except ZeroDivisionError:

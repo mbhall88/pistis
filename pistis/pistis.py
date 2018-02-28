@@ -7,6 +7,7 @@ from __future__ import absolute_import
 import os
 import pysam
 import matplotlib
+
 matplotlib.use('Agg')
 import seaborn as sns
 import click
@@ -19,8 +20,8 @@ REQUIRED_EXT = '.pdf'
 
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.option('--fastq', '-f',
-                type=click.Path(exists=True, dir_okay=False,
-                                resolve_path=True),
+              type=click.Path(exists=True, dir_okay=False,
+                              resolve_path=True),
               help="Fastq file to plot. This can be gzipped.")
 @click.option('--output', '-o',
               type=click.Path(dir_okay=True, resolve_path=True,
@@ -89,7 +90,7 @@ def main(fastq, output, kind, log_length, bam):
         plots_for_report.append([
             plots.gc_plot(gc_content),
             plots.length_vs_qual_plot(read_lengths, mean_quality_scores,
-                                          log_length=log_length, kind=kind),
+                                      log_length=log_length, kind=kind),
             plots.quality_per_position(bins_from_start, 'start'),
             plots.quality_per_position(bins_from_end, 'end')
         ])

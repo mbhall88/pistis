@@ -38,6 +38,7 @@ get_test_data.__annotations__ = {'return': Tuple[List[float], List[int],
                                                  collections.OrderedDict,
                                                  collections.OrderedDict]}
 
+
 @pytest.fixture
 def get_test_bam_data():
     """Generate a very small bam dataset to use for plotting.
@@ -63,7 +64,7 @@ def test_gc_plot():
 def test_length_vs_qual_plot():
     """Test generation of read length vs. quality score plot."""
     fname = os.path.join(IMG_DIR, 'len_v_qual.png')
-    expected_fname = os.path.join(IMG_DIR, 'len_v_qual-expected.png')
+    # expected_fname = os.path.join(IMG_DIR, 'len_v_qual-expected.png')
 
     lengths, quality_scores = get_test_data()[1:3]
     fig = plots.length_vs_qual_plot(lengths, quality_scores)
@@ -111,11 +112,13 @@ def test_save_plots_to_pdf():
      mean_quality_scores,
      df_start,
      df_end) = get_test_data()
+    perc_identities = get_test_bam_data()
     plot1 = plots.gc_plot(gc_content)
     plot2 = plots.length_vs_qual_plot(read_lengths, mean_quality_scores)
     plot3 = plots.quality_per_position(df_start)
     plot4 = plots.quality_per_position(df_end, from_end='end')
-    plots.save_plots_to_pdf([plot1, plot2, plot3, plot4], fname)
+    plot5 = plots.percent_identity(perc_identities)
+    plots.save_plots_to_pdf([plot1, plot2, plot3, plot4, plot5], fname)
     # assert open(fname, 'rb').read() == open(expected_fname, 'rb').read()
     # Open report.pdf and report-expected.pdf and compare by eye. Currently no
     # test to compare two PDF documents.

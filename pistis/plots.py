@@ -125,7 +125,6 @@ def quality_per_position(data, from_end='start'):
     title = 'Quality score across reads, from the {}'.format(from_end)
     xlabel = 'Read position (bp)'
     ylabel = 'Phred Quality Score'
-    cut = 0  # cuts the violin plot at max and min values (doesn't extrapolate)
 
     fig, axes = plt.subplots(figsize=FIGURE_SIZE, dpi=DPI)
     plot = sns.boxplot(data=values, ax=axes, linewidth=0.5)
