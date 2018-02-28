@@ -7,12 +7,11 @@ import os
 import re
 import pysam
 from typing import List, Tuple, Iterable, NewType
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 import numpy as np
 from six.moves import zip
 
 Sam = NewType('Sam', pysam.AlignedSegment)
-
 
 BIN_NAMES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11-20',
              '21-50', '51-100', '101-200', '201-300']
@@ -39,16 +38,17 @@ def collect_fastq_data(fastq):
             bin and the values are quality scores for all reads at that
             position(s) from the end of each read.
     """
-    gc_content = []
+    gc_content_list = []
     read_lengths = []
     mean_quality_scores = []
     bins_from_start = OrderedDict((name, []) for name in BIN_NAMES)
     bins_from_end = OrderedDict((name, []) for name in BIN_NAMES)
     for record in fastq:
-        gc_content.append(record.gc_content(as_decimal=False))
-        length = len(record.seq)
+        sequence = record.sequence
+        gc_content_list.append(gc_content(sequence, as_decimal=False))
+        length = len(sequence)
         read_lengths.append(length)
-        __, q_scores = record.to_Fasta_and_qual()
+        q_scores = record.get_quality_array()
         mean_quality_scores.append(sum(q_scores) / length)
         # bin the quality scores for the read from start and end by position
         for i, (start_idx, bin_name) in enumerate(zip(BIN_STARTS[:-1],
@@ -58,8 +58,8 @@ def collect_fastq_data(fastq):
             bins_from_start[bin_name].extend(slice_from_start)
             bins_from_end[bin_name].extend(slice_from_end)
 
-    return (gc_content, read_lengths, mean_quality_scores, bins_from_start,
-            bins_from_end)
+    return (gc_content_list, read_lengths, mean_quality_scores,
+            bins_from_start, bins_from_end)
 
 
 collect_fastq_data.__annotations__ = {'fastq': Iterable,
@@ -113,9 +113,10 @@ def get_percent_identity(read):
         return 100 * (1 - read.get_tag("NM") / read.query_alignment_length)
     except KeyError:
         try:
-            return 100 * (1 - (_parse_md_flag(read.get_tag("MD")) + _parse_cigar(
-                read.cigartuples)) /
-                          read.query_alignment_length)
+            return 100 * (
+                        1 - (_parse_md_flag(read.get_tag("MD")) + _parse_cigar(
+                    read.cigartuples)) /
+                        read.query_alignment_length)
         except KeyError:
             return None
     except ZeroDivisionError:
@@ -133,3 +134,46 @@ def _parse_md_flag(md_list):
 def _parse_cigar(cigartuples):
     """Count the insertions in the read using the CIGAR string."""
     return sum([item[1] for item in cigartuples if item[0] == 1])
+
+
+def gc_content(sequence, as_decimal=True):
+    """Returns the GC content for the sequence.
+    Notes:
+        This method ignores N when calculating the length of the sequence.
+        It does not, however ignore other ambiguous bases. It also only
+        includes the ambiguous base S (G or C). In this sense the method is
+        conservative with its calculation.
+    Args:
+        sequence: A DNA string.
+        as_decimal: Return the result as a decimal. Setting to False
+        will return as a percentage. i.e for the sequence GCAT it will
+        return 0.5 by default and 50.00 if set to False.
+    Returns:
+        float: GC content calculated as the number of G, C, and S divided
+        by the number of (non-N) bases (length).
+    """
+    gc_total = 0.0
+    num_bases = 0.0
+    n_tuple = tuple('nN')
+    accepted_bases = tuple('cCgGsS')
+
+    # counter sums all unique characters in sequence. Case insensitive.
+    for base, count in Counter(sequence).items():
+
+        # dont count N in the number of bases
+        if base not in n_tuple:
+            num_bases += count
+
+            if base in accepted_bases:  # S is a G or C
+                gc_total += count
+
+    result = gc_total / num_bases
+
+    if not as_decimal:  # return as percentage
+        result *= 100
+
+    return result
+
+
+gc_content.__annotations__ = {'sequence': str, 'as_decimal': bool,
+                              'return': float}

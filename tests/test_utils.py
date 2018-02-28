@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 import copy
 import pytest
-import pyfastaq
+import pysam
 from pistis import utils
 from six.moves import zip
 
@@ -16,12 +16,12 @@ def small_fastq():
     Returns:
         An iterator with 5 fastq records in it.
     """
-    fastq = pyfastaq.sequences.file_reader(TEST_FASTQ, read_quals=True)
-    records = []
-    idxs = (55, 100, 64, 98, 243)
-    for i, read in enumerate(fastq):
-        if i in idxs:
-            records.append(copy.copy(read))
+    with pysam.FastxFile(TEST_FASTQ) as fastq:
+        records = []
+        idxs = (55, 100, 64, 98, 243)
+        for i, read in enumerate(fastq):
+            if i in idxs:
+                records.append(copy.copy(read))
 
     return iter(records)
 
@@ -82,3 +82,19 @@ def test_collect_fastq_data():
     assert all(x == y
                for x, y in
                zip(sorted(correct_df_end_pos_11_20), sorted(df_end['11-20'])))
+
+
+def test_gc_content():
+    """Test GC content calculation works as expected"""
+    tests = [
+        ('cgCG', 1.0),
+        ('tTaA', 0.0),
+        ('GCAT', 0.5),
+        ('GCATNN', 0.5),
+        ('GCATNNS', 0.6),
+        ('GCATNNSK', 0.5)
+    ]
+    for test, answer in tests:
+        assert pytest.approx(utils.gc_content(test)) == answer
+        assert (pytest.approx(utils.gc_content(test, as_decimal=False) ==
+                              answer * 100))

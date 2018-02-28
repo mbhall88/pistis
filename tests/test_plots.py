@@ -3,7 +3,6 @@ from __future__ import absolute_import
 import pytest
 import os
 import copy
-import pyfastaq
 import pysam
 import collections
 from typing import Tuple, List
@@ -25,12 +24,12 @@ def get_test_data():
         A tuple containing gc content, read lengths, quality scores and quality
         scores per position from the start and end of the reads.
     """
-    fastq = pyfastaq.sequences.file_reader(TEST_FASTQ, read_quals=True)
-    records = []
-    for i, read in enumerate(fastq):
-        if i == 50:
-            break
-        records.append(copy.copy(read))
+    with pysam.FastxFile(TEST_FASTQ) as fastq:
+        records = []
+        for i, read in enumerate(fastq):
+            if i == 50:
+                break
+            records.append(copy.copy(read))
     return utils.collect_fastq_data(iter(records))
 
 

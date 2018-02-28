@@ -5,7 +5,7 @@ data and writes it to a PDF report."""
 from __future__ import division
 from __future__ import absolute_import
 import os
-import pyfastaq
+import pysam
 import matplotlib
 matplotlib.use('Agg')
 import seaborn as sns
@@ -77,14 +77,13 @@ def main(fastq, output, kind, log_length, bam):
 
     plots_for_report = []
     if fastq:
-        fastq_file = pyfastaq.sequences.file_reader(fastq, read_quals=True)
-
-        # collect the data needed for plotting
-        (gc_content,
-         read_lengths,
-         mean_quality_scores,
-         bins_from_start,
-         bins_from_end) = utils.collect_fastq_data(fastq_file)
+        with pysam.FastxFile(fastq) as fastq_file:
+            # collect the data needed for plotting
+            (gc_content,
+             read_lengths,
+             mean_quality_scores,
+             bins_from_start,
+             bins_from_end) = utils.collect_fastq_data(fastq_file)
 
         # generate plots
         plots_for_report.append([
