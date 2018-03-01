@@ -124,6 +124,10 @@ You can also provide a `gzip`ed fastq file without any extra steps
 pistis -f /path/to/my.fastq.gz -o /save/as/report.pdf
 ```
 
+**Examples**  
+GC content:  
+![gc content plot](https://github.com/mbhall88/pistis/blob/master/docs/imgs/pistis_gc_plot.png)
+
 ---
 
 **Fastq and BAM/SAM** - This will return the above four plots, plus a distribution
@@ -138,6 +142,19 @@ pistis -f /path/to/my.fastq  -b /path/to/my.bam -o /save/as/report.pdf
 pistis -f /path/to/my.fastq  -b /path/to/my.sam -o /save/as/report.pdf
 ```
 
+---
+
+**BAM/SAM only** - At this stage you will receive only the distribution
+plot of each read's percent identity with the reference it is aligned to. In a
+future release I aim to allow you to also get the other four fastq-only plots.
+
+```sh
+pistis -b /path/to/my.bam -o /save/as/report.pdf
+```
+
+As with the fastq-only method, if you don't provide a `--output/-o` option the file will be saved in the current
+directory with the basename of the [BS]AM file. So in the above example it would be
+saved as `my.pdf`.
 
 ## Credits
 
