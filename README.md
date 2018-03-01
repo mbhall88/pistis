@@ -128,11 +128,22 @@ pistis -f /path/to/my.fastq.gz -o /save/as/report.pdf
 GC content:  
 ![gc content plot](https://github.com/mbhall88/pistis/blob/master/docs/imgs/pistis_gc_plot.png)
 
+Read length vs. mean read quality score:  
+![read length vs quality plot](https://github.com/mbhall88/pistis/blob/master/docs/imgs/pistis_qual_v_len.png)  
+
+Base quality from the start of each read:  
+![base quality from start plot](https://github.com/mbhall88/pistis/blob/master/docs/imgs/pistis_qual_start.png)  
+
+Base quality from the end of each read:  
+![base quality from end plot](https://github.com/mbhall88/pistis/blob/master/docs/imgs/pistis_qual_end.png)
+
 ---
 
 **Fastq and BAM/SAM** - This will return the above four plots, plus a distribution
 plot of each read's percent identity with the reference it is aligned to in the
-[BS]AM file. Reads which are flagged as supplementary or secondary are not included.  
+[BS]AM file. Reads which are flagged as supplementary or secondary are not included.
+The plot also includes a dashed vertical red line indicating the median 
+percent identity.  
 Note: If using a BAM file, it must be sorted and indexed (i.e `.bai` file). See [`samtools`](http://www.htslib.org/doc/samtools.html)
 for instructions on how to do this.
 
@@ -141,6 +152,10 @@ pistis -f /path/to/my.fastq  -b /path/to/my.bam -o /save/as/report.pdf
 # or
 pistis -f /path/to/my.fastq  -b /path/to/my.sam -o /save/as/report.pdf
 ```
+
+**Example**  
+Distribution of aligned read percent identity:  
+![percent identity plot](https://github.com/mbhall88/pistis/blob/master/docs/imgs/pistis_perc_id.png)
 
 ---
 
