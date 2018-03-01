@@ -7,7 +7,6 @@ from __future__ import absolute_import
 import os
 import pysam
 import matplotlib
-
 matplotlib.use('Agg')
 import seaborn as sns
 import click
