@@ -49,7 +49,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -f .coverage
 	rm -fr htmlcov/
 
-init: ## install pipenv
+init: ## install pi
 	pip install pipenv
 	pipenv install --dev
 
@@ -85,8 +85,7 @@ release: clean ## package and upload a release
 
 dist: clean ## builds source and wheel package
 	python setup.py sdist
-	python setup.py bdist_wheel
-	ls -l dist
+	twine upload -r pypi dist/`ls -t dist | head -1`
 
 install: clean ## install the package to the active Python's site-packages
 	pipenv install -e .	
