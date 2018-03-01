@@ -87,7 +87,7 @@ def main(fastq, output, kind, log_length, bam):
              bins_from_end) = utils.collect_fastq_data(fastq_file)
 
         # generate plots
-        plots_for_report.append([
+        plots_for_report.extend([
             plots.gc_plot(gc_content),
             plots.length_vs_qual_plot(read_lengths, mean_quality_scores,
                                       log_length=log_length, kind=kind),
