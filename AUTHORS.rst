@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Michael Benjamin Hall <mbhall88@gmail.com>
+* Michael Hall <mbhall88@gmail.com>
 
 Contributors
 ------------

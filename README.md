@@ -142,7 +142,7 @@ Base quality from the end of each read:
 **Fastq and BAM/SAM** - This will return the above four plots, plus a distribution
 plot of each read's percent identity with the reference it is aligned to in the
 [BS]AM file. Reads which are flagged as supplementary or secondary are not included.
-The plot also includes a dashed vertical red line indicating the median 
+The plot also includes a dashed vertical red line indicating the median
 percent identity.  
 Note: If using a BAM file, it must be sorted and indexed (i.e `.bai` file). See [`samtools`](http://www.htslib.org/doc/samtools.html)
 for instructions on how to do this.
@@ -171,6 +171,25 @@ As with the fastq-only method, if you don't provide a `--output/-o` option the f
 directory with the basename of the [BS]AM file. So in the above example it would be
 saved as `my.pdf`.
 
+#### Usage in a development environment
+
+If you would like to use `pistis` within a development environment such as a
+`jupyter notebook` or just a plain ol' python shell then take a look at [this example notebook](https://github.com/mbhall88/pistis/blob/master/examples/example_usage.ipynb)
+for all the details.
+
 ## Credits
 
-This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [`audreyr/cookiecutter-pypackage` project template](https://github.com/audreyr/cookiecutter-pypackage).
+* This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [`audreyr/cookiecutter-pypackage` project template](https://github.com/audreyr/cookiecutter-pypackage).  
+* The two test data files (fastq and BAM) that I have use in this repository were
+taken from [Wouter De Coster's `nanotest` repository](https://github.com/wdecoster/nanotest).
+* Which in turn comes from [Nick Loman and Josh Quick](http://lab.loman.net/2017/03/09/ultrareads-for-nanopore/).  
+* The example plots in this `README` were made using the entire fastq of basecalled
+reads from the experiment in that [blog on "whale hunting"(http://lab.loman.net/2017/03/09/ultrareads-for-nanopore/)].  
+* The plot for the BAM file was obtained by running `pistis` on a BAM file generated
+by mapping the fastq file to *E. coli* reference [NC_000913.3](https://www.ncbi.nlm.nih.gov/nuccore/NC_000913.3)
+using Heng Li's [`minimap2`](https://github.com/lh3/minimap2) and `-x map-ont` option.
+
+# Contributing
+
+If you would like to contribute to this package you are more than welcome.  
+**Please read through the [contributing guidelines](https://github.com/mbhall88/pistis/blob/master/CONTRIBUTING.rst) first**.
