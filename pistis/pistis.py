@@ -22,7 +22,7 @@ REQUIRED_EXT = '.pdf'
               type=click.Path(exists=True, dir_okay=False,
                               resolve_path=True),
               help="Fastq file to plot. This can be gzipped.")
-@click.option('--output', '-o',
+@click.option('--output', '-o', default='.',
               type=click.Path(dir_okay=True, resolve_path=True,
                               writable=True),
               help="Path to save the plot PDF as. If name is not specified,"
