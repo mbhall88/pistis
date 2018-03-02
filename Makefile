@@ -84,6 +84,7 @@ release: clean ## package and upload a release
 	python setup.py bdist_wheel upload
 
 dist: clean ## builds source and wheel package
+    pandoc --from=markdown --to=rst --output=README.rst README.md
 	python setup.py sdist
 	twine upload -r pypi dist/`ls -t dist | head -1`
 
