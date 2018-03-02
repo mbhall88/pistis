@@ -83,11 +83,10 @@ release: clean ## package and upload a release
 	python setup.py sdist upload
 	python setup.py bdist_wheel upload
 
-dist:  ## builds source and wheel package
-    clean
-    python setup.py sdist
-    twine upload -r pypi dist/`ls -t dist | head -1`
-    echo "Makre sure you have synchronised README files with pandoc --from=markdown --to=rst --output=README.rst README.md"
+dist: clean  ## builds source and wheel package
+	python setup.py sdist
+	twine upload -r pypi dist/`ls -t dist | head -1`
+	echo "Make sure you have synchronised README files with pandoc --from=markdown --to=rst --output=README.rst README.md"
 
 
 install: clean ## install the package to the active Python's site-packages
