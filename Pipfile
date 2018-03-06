@@ -7,12 +7,12 @@ name = "pypi"
 
 [packages]
 
-click = "*"
-matplotlib = "*"
-seaborn = "*"
 numpy = "*"
 "e1839a8" = {path = ".", editable = true}
 pysam = "*"
+matplotlib = "*"
+click = "*"
+seaborn = "*"
 
 
 [dev-packages]
@@ -22,7 +22,7 @@ watchdog = "==0.8.3"
 "flake8" = "==3.5.0"
 tox = "*"
 coverage = "==4.5.1"
-Sphinx = "==1.7.0"
+sphinx = "==1.7.0"
 pytest = "*"
 pytest-runner = "==2.11.1"
 "e1839a8" = {path = ".", editable = true}
