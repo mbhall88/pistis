@@ -116,8 +116,8 @@ To use ``pistis`` in this way you just need a fastq file.
     pistis -f /path/to/my.fastq -o /save/as/report.pdf --no_log_length
 
 Additionally, you can change the way the data is represented in the
-bivariate plot. The default is a kernel density estimate (as in the
-below image), however you can choose to use a `hex bin or scatter
+bivariate plot. The default is a scatter plot (as in the below image),
+however you can choose to use a `hex bin or kernel density estimation
 version
 instead <https://seaborn.pydata.org/generated/seaborn.jointplot.html>`__.
 In the running example, to use a hex bin you would run the following
