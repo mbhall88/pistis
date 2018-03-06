@@ -82,7 +82,7 @@ def length_vs_qual_plot(lengths, quality_scores, kind='scatter',
         # change the alpha of the scatter points
         if kind == 'scatter':
             plot.ax_joint.cla()
-            plot.ax_joint.scatter(x_data, y_data, alpha=0.5)
+            plot.ax_joint.scatter(x_data, y_data, alpha=0.25)
 
         plot.set_axis_labels(xlabel=xlabel, ylabel=ylabel)
 
