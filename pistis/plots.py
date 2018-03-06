@@ -48,16 +48,17 @@ gc_plot.__annotations__ = {'gc_content': List[float],
                            'return': plt.Figure}
 
 
-def length_vs_qual_plot(lengths, quality_scores, kind='kde', log_length=True):
+def length_vs_qual_plot(lengths, quality_scores, kind='scatter',
+                        log_length=True):
     """Generates a plot of the read length against quality score for each read.
 
     Args:
         lengths: A list with each element being the length of a read.
         quality_scores: A list with each element being the mean Phred quality
         score for a read.
-        kind: The way the points are represented on the plot. The default (kde)
-        is a kernel density estimate. Other options include hex bins, or
-        single points ('hex' and 'scatter' respectively).
+        kind: The way the points are represented on the plot. Options include
+        hex bins, scatter points or kernel density estimatation ('hex',
+        'scatter', and 'kde' respectively).
         log_length: Plot the length as a logarithm (base 10).
 
     Returns:
@@ -65,7 +66,7 @@ def length_vs_qual_plot(lengths, quality_scores, kind='kde', log_length=True):
     """
     # use slightly different plot styling for this plot compared to the others
     with sns.axes_style('whitegrid',
-                        rc={"grid.linewidth": 0.5, 'grid.linestyle': '--'}):
+                        rc={"grid.linewidth": 0.25, 'grid.linestyle': '--'}):
         xlabel = 'Read Length (bp)'
         ylabel = 'Phred quality score'
 
@@ -76,13 +77,23 @@ def length_vs_qual_plot(lengths, quality_scores, kind='kde', log_length=True):
         if log_length:
             x_data = np.log10(x_data)
 
-        plot = sns.jointplot(x=x_data, y=y_data, kind=kind, space=0, size=3,
-                             stat_func=None)
+        plot = sns.jointplot(x=x_data, y=y_data, kind=kind, space=0, size=3)
+
+        # change the alpha of the scatter points
+        if kind == 'scatter':
+            plot.ax_joint.cla()
+            plot.ax_joint.scatter(x_data, y_data, alpha=0.5)
+
         plot.set_axis_labels(xlabel=xlabel, ylabel=ylabel)
+
+        # fix the y axis limits to reasonable phred scores
+        quality_ticks = list(range(0, 50, 5))
+        plot.ax_joint.set_yticks(quality_ticks)
+        plot.ax_joint.set_yticklabels(quality_ticks)
 
         if log_length:  # format x-axis labels and ticks for log data
             log_ticks = [500, 1e3, 3e3, 5e3, 1e4, 3e4, 5e4, 1e5, 3e5, 5e5, 1e6,
-                         1.5e6]
+                         1.5e6, 2e6]
             plot.ax_joint.set_xticks(np.log10(log_ticks))
             plot.ax_joint.set_xticklabels(list(map(int, log_ticks)),
                                           rotation=270)

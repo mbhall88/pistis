@@ -28,11 +28,11 @@ REQUIRED_EXT = '.pdf'
               help="Path to save the plot PDF as. If name is not specified,"
                    " will use the name of the fastq (or bam) file with .pdf "
                    "extension.")
-@click.option('--kind', '-k', default='kde',
+@click.option('--kind', '-k', default='scatter',
               type=click.Choice(['kde', 'scatter', 'hex']),
               help="The kind of representation to use for the jointplot of "
                    "quality score vs read length. Accepted kinds are 'scatter'"
-                   ", 'kde' (default), or 'hex'. For examples refer to "
+                   "(default), 'kde', or 'hex'. For examples refer to "
                    "https://seaborn.pydata.org/generated/seaborn.jointplot.html")
 @click.option('--log_length/--no_log_length', default=True,
               help="Plot the read length as a log10 transformation on the "
