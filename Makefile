@@ -52,7 +52,7 @@ clean-test: ## remove test and coverage artifacts
 
 init: ## install pi
 	pip install pipenv
-	pipenv install --dev
+	pipenv install --dev --skip-lock
 
 lint: ## check style with flake8
 	flake8 pistis tests
@@ -91,4 +91,4 @@ dist: clean  ## builds source and wheel package
 
 
 install: clean ## install the package to the active Python's site-packages
-	pipenv install -e .	
+	pipenv install -e .	--skip-lock

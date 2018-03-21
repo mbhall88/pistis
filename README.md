@@ -184,7 +184,7 @@ for all the details.
 taken from [Wouter De Coster's `nanotest` repository](https://github.com/wdecoster/nanotest).
 * Which in turn comes from [Nick Loman and Josh Quick](http://lab.loman.net/2017/03/09/ultrareads-for-nanopore/).  
 * The example plots in this `README` were made using the entire fastq of basecalled
-reads from the experiment in that [blog on "whale hunting"(http://lab.loman.net/2017/03/09/ultrareads-for-nanopore/)].  
+reads from the experiment in that [blog on "whale hunting"](http://lab.loman.net/2017/03/09/ultrareads-for-nanopore/).  
 * The plot for the BAM file was obtained by running `pistis` on a BAM file generated
 by mapping the fastq file to *E. coli* reference [NC_000913.3](https://www.ncbi.nlm.nih.gov/nuccore/NC_000913.3)
 using Heng Li's [`minimap2`](https://github.com/lh3/minimap2) and `-x map-ont` option.
