@@ -1,8 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
 examples/plot_prototyping.ipynb
 
-# only push the rst version of README
-README.md
+# only push the md version of README
+README.rst
 
 ### Example user template template
 ### Example user template

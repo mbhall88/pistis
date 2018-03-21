@@ -98,6 +98,10 @@ def length_vs_qual_plot(lengths, quality_scores, kind='scatter',
             plot.ax_joint.set_xticklabels(list(map(int, log_ticks)),
                                           rotation=270)
 
+        # make sure the marginal axes align with the jointplot
+        plot.ax_marg_x.set_xlim(plot.ax_joint.get_xlim())
+        plot.ax_marg_y.set_ylim(plot.ax_joint.get_ylim())
+
         plot.fig.set(dpi=DPI, size_inches=FIGURE_SIZE)
 
     return plot.fig
