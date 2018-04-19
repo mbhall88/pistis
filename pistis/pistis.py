@@ -28,11 +28,11 @@ REQUIRED_EXT = '.pdf'
               help="Path to save the plot PDF as. If name is not specified,"
                    " will use the name of the fastq (or bam) file with .pdf "
                    "extension.")
-@click.option('--kind', '-k', default='scatter',
+@click.option('--kind', '-k', default='kde',
               type=click.Choice(['kde', 'scatter', 'hex']),
               help="The kind of representation to use for the jointplot of "
                    "quality score vs read length. Accepted kinds are 'scatter'"
-                   "(default), 'kde', or 'hex'. For examples refer to "
+                   ", 'kde' (default), or 'hex'. For examples refer to "
                    "https://seaborn.pydata.org/generated/seaborn.jointplot.html")
 @click.option('--log_length/--no_log_length', default=True,
               help="Plot the read length as a log10 transformation on the "
@@ -48,8 +48,8 @@ def main(fastq, output, kind, log_length, bam):
             2. Jointplot showing the read length vs. phred quality score for each
             read. The interior representation of this plot can be altered with the
             --kind option.\n
-            3. Violin plot of the phred quality score at positional bins across all reads. The reads are binned into read positions 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11-20, 21-50, 51-100, 101-200, 201-300, 301-1000, 1001-10000, and >10000. Plots from the start to the end of reads.\n
-            4. Same as 3, but plots from the end of the read to the start.\n
+            3. Box plot of the phred quality score at positional bins across all reads. The reads are binned into read positions 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11-20, 21-50, 51-100, 101-200, 201-300. Plots from the start of reads.\n
+            4. Same as 3, but plots from the end of the read.\n
     Additionally, if you provide a BAM/SAM file a histogram of the read percent
     identity will be added to the report.
     """

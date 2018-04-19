@@ -67,7 +67,7 @@ def test_length_vs_qual_plot():
     # expected_fname = os.path.join(IMG_DIR, 'len_v_qual-expected.png')
 
     lengths, quality_scores = get_test_data()[1:3]
-    fig = plots.length_vs_qual_plot(lengths, quality_scores, kind='scatter')
+    fig = plots.length_vs_qual_plot(lengths, quality_scores, kind='kde')
     fig.savefig(fname, format='png')
     # todo: the below statement keeps breaking tests. The two files are VERY
     # subtley different if you make one on macosx and the other on linux. They

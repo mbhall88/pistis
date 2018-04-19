@@ -13,7 +13,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from six.moves import map
 
 
-DPI = 300  # resolution for plots
+DPI = 150  # resolution for plots
 FIGURE_SIZE = (11.7, 10)
 
 
@@ -82,7 +82,7 @@ def length_vs_qual_plot(lengths, quality_scores, kind='scatter',
         # change the alpha of the scatter points
         if kind == 'scatter':
             plot.ax_joint.cla()
-            plot.ax_joint.scatter(x_data, y_data, alpha=0.25)
+            plot.ax_joint.scatter(x_data, y_data, alpha=0.15)
 
         plot.set_axis_labels(xlabel=xlabel, ylabel=ylabel)
 
@@ -202,7 +202,7 @@ def save_plots_to_pdf(plots, filename):
     pdf_doc = PdfPages(filename)
 
     for plot in plots:
-        pdf_doc.savefig(plot)
+        pdf_doc.savefig(plot, dpi=DPI)
 
     pdf_doc.close()
 
