@@ -43,9 +43,9 @@ REQUIRED_EXT = '.pdf'
                    "from.")
 @click.option('--downsample', '-d',
               type=int,
-              default=100000,
+              default=50000,
               help="Down-sample the sequence files to a given number of reads. "
-                   "Set to 0 for no subsampling. Default: 100000")
+                   "Set to 0 for no subsampling. Default: 50000")
 def main(fastq, output, kind, log_length, bam, downsample):
     """A package for sanity checking (quality control) your long read data.
         Feed it a fastq file and in return you will receive a PDF with four plots:\n
