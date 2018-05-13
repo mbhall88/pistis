@@ -115,8 +115,8 @@ length_vs_qual_plot.__annotations__ = {'lengths': List[int],
 
 
 def quality_per_position(data, from_end='start'):
-    """Generate a violin plot of quality scores across positions in all reads.
-    Each violin in the plot corresponds to a 'bin'. That is, all quality scores
+    """Generate a box plot of quality scores across positions in all reads.
+    Each box in the plot corresponds to a 'bin'. That is, all quality scores
     at that position (or positions if it is a range) across all reads.
 
     Args:

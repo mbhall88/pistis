@@ -53,13 +53,12 @@ Usage: pistis [OPTIONS]
           each         read. The interior representation of this plot can be
           altered with the         --kind option.
 
-          3. Violin plot of the phred quality score at positional bins
-          across all reads. The reads are binned into read positions 1, 2,
-          3, 4, 5, 6, 7, 8, 9, 10, 11-20, 21-50, 51-100, 101-200, 201-300,
-          301-1000, 1001-10000, and >10000. Plots from the start to the end
-          of reads.
+          3. Box plot of the phred quality score at positional bins across
+          all reads. The reads are binned into read positions 1, 2, 3, 4, 5,
+          6, 7, 8, 9, 10, 11-20, 21-50, 51-100, 101-200, 201-300. Plots from
+          the start of reads.
 
-          4. Same as 3, but plots from the end of the read to the start.
+          4. Same as 3, but plots from the end of the read.
 
   Additionally, if you provide a BAM/SAM file a histogram of the read
   percent identity will be added to the report.
@@ -80,8 +79,18 @@ Options:
                                   plot
   -b, --bam PATH                  SAM/BAM file to produce read percent
                                   identity histogram from.
+  -d, --downsample INTEGER        Down-sample the sequence files to a given
+                                  number of reads. Set to 0 for no
+                                  subsampling. Default: 50000
   -h, --help                      Show this message and exit.
 ```
+
+Note the `--downsample` option is set to 50000 by default. That is, `pistis` will 
+only plot 50000 reads (sampled from a uniform distribution). You can set this to 
+0 if you want to plot every read, or select another number of your choosing. Be aware 
+that if you try to plot too many reads you may run into memory issues, so try 
+downsampling if this happens.  
+
 There are three different use cases - currently - for producing plots:  
 
 **Fastq only** - This will return four plots:
