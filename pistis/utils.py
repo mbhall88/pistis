@@ -6,7 +6,8 @@ from __future__ import absolute_import
 import os
 import re
 import pysam
-from typing import List, Tuple, Iterable, NewType
+import random
+from typing import List, Tuple, Iterable, NewType, Dict
 from collections import OrderedDict, Counter
 import numpy as np
 from six.moves import zip
@@ -18,12 +19,14 @@ BIN_NAMES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11-20',
 BIN_STARTS = np.append(np.arange(11), np.array([21, 51, 101, 201, 301]))
 
 
-def collect_fastq_data(fastq):
+def collect_fastq_data(fastq, downsample=0):
     """Given a fastq filename, gets the GC content, mean quality scores, read
     length, and quality at certain positional bins - for each read.
 
     Args:
         fastq: An iterable fastq object.
+        downsample: Down-sample the fastq file to given number of reads. Set
+        to 0 for no down-sampling.
 
     Returns:
         A tuple of:
@@ -58,22 +61,74 @@ def collect_fastq_data(fastq):
             bins_from_start[bin_name].extend(slice_from_start)
             bins_from_end[bin_name].extend(slice_from_end)
 
+    if downsample > 0:
+        gc_content_list = _downsample_list(gc_content_list, downsample)
+        read_lengths = _downsample_list(read_lengths, downsample)
+        mean_quality_scores = _downsample_list(mean_quality_scores, downsample)
+        bins_from_start = _downsample_dict(bins_from_start, downsample)
+        bins_from_end = _downsample_dict(bins_from_end, downsample)
+
     return (gc_content_list, read_lengths, mean_quality_scores,
             bins_from_start, bins_from_end)
 
 
-collect_fastq_data.__annotations__ = {'fastq': Iterable,
+collect_fastq_data.__annotations__ = {'fastq': Iterable, 'downsample': int,
                                       'return': Tuple[List[float], List[int],
                                                       List[float], OrderedDict,
                                                       OrderedDict]}
 
 
-def sam_percent_identity(filename):
+def _downsample_list(full_list, num_samples):
+    """Returns a down-sampled list with a given number of samples.
+
+    Args:
+        full_list: A list to down-sample.
+        num_samples: The number of elements from full_list to keep.
+
+    Returns:
+        A list with length of num_samples.
+    """
+    return random.sample(full_list, k=num_samples)
+
+
+_downsample_list.__annotations__ = {'full_list': list, 'num_samples': int,
+                                    'returns': list}
+
+
+def _downsample_dict(full_dict, num_samples):
+    """Returns a down-sampled dictionary with a given number of samples in
+    each value list.
+
+    Args:
+        full_dict: A dictionary with lists as values to down-sample.
+        num_samples: The number of elements in each value list from full_dict
+        to keep.
+
+    Returns:
+        A dictionary with value lengths of num_samples.
+    """
+    downsampled_dict = OrderedDict()
+    for key, value in full_dict.items():
+        if len(value) > num_samples:
+            downsampled_dict[key] = random.sample(value, k=num_samples)
+        else:
+            downsampled_dict[key] = value
+
+    return downsampled_dict
+
+
+_downsample_dict.__annotations__ = {'full_dict': dict, 'num_samples': int,
+                                    'returns': dict}
+
+
+def sam_percent_identity(filename, downsample=0):
     """Opens a SAM/BAM file and extracts the read percent identity for all
     mapped reads that are nort supplementary or secondary alignments.
 
     Args:
         filename: Path to SAM/BAM file.
+        downsample: Down-sample the sam file to given number of reads. Set
+        to 0 for no down-sampling.
 
     Returns:
         A list of the percent identity for all valid reads.
@@ -95,10 +150,15 @@ def sam_percent_identity(filename):
         pid = get_percent_identity(record)
         if pid:
             perc_identities.append(pid)
+
+    if downsample > 0:
+        perc_identities = _downsample_list(perc_identities, downsample)
+
     return perc_identities
 
 
-sam_percent_identity.__annotations__ = {'filename': str, 'return': List[float]}
+sam_percent_identity.__annotations__ = {'filename': str, 'downsample': int,
+                                        'return': List[float]}
 
 
 def get_percent_identity(read):

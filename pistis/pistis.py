@@ -41,7 +41,12 @@ REQUIRED_EXT = '.pdf'
               type=click.Path(exists=True, dir_okay=False, resolve_path=True),
               help="SAM/BAM file to produce read percent identity histogram "
                    "from.")
-def main(fastq, output, kind, log_length, bam):
+@click.option('--downsample', '-d',
+              type=int,
+              default=100000,
+              help="Down-sample the sequence files to a given number of reads. "
+                   "Set to 0 for no subsampling. Default: 100000")
+def main(fastq, output, kind, log_length, bam, downsample):
     """A package for sanity checking (quality control) your long read data.
         Feed it a fastq file and in return you will receive a PDF with four plots:\n
             1. GC content histogram with distribution curve for sample.\n
@@ -83,7 +88,7 @@ def main(fastq, output, kind, log_length, bam):
              read_lengths,
              mean_quality_scores,
              bins_from_start,
-             bins_from_end) = utils.collect_fastq_data(fastq_file)
+             bins_from_end) = utils.collect_fastq_data(fastq_file, downsample)
 
         # generate plots
         plots_for_report.extend([
@@ -95,7 +100,7 @@ def main(fastq, output, kind, log_length, bam):
         ])
     if bam:
         # generate read percent identity plot
-        perc_identities = utils.sam_percent_identity(bam)
+        perc_identities = utils.sam_percent_identity(bam, downsample)
         plots_for_report.append(plots.percent_identity(perc_identities))
 
     plots.save_plots_to_pdf(plots_for_report, save_as)
