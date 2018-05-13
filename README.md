@@ -6,7 +6,7 @@
 [![PyPI status](https://img.shields.io/pypi/v/pistis.svg)](https://pypi.python.org/pypi/pistis)
 [![Build Status](https://travis-ci.org/mbhall88/pistis.svg?branch=master)](https://travis-ci.org/mbhall88/pistis)
 [![GitHub license](https://img.shields.io/github/license/mbhall88/pistis.svg)](https://github.com/mbhall88/pistis/blob/master/LICENSE)
-![Twitter Follow](https://img.shields.io/twitter/follow/mbhall88.svg?style=social&logo=twitter&label=Follow)
+[![Twitter Follow](https://img.shields.io/twitter/follow/mbhall88.svg?style=social&logo=twitter&label=Follow)](https://twitter.com/mbhall88)  
 
 This package provides plotting designed to give you an idea of how your long read
 sequencing data looks. It was conceived of and developed with nanopore reads in
