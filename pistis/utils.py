@@ -88,6 +88,9 @@ def _downsample_list(full_list, num_samples):
     Returns:
         A list with length of num_samples.
     """
+    if len(full_list) > num_samples:  # make sure we dont try over sample
+        num_samples = len(full_list)
+
     return random.sample(full_list, k=num_samples)
 
 
