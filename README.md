@@ -22,7 +22,7 @@ pip3 install pistis
 You can also use `pip` if you are running with python2.  
 Or using a virtual
 environment manager such as [conda](https://conda.io/docs/) or
-[pipenv](https://docs.pipenv.org/) (my personal favourite).  
+[pipenv](https://docs.pipenv.org/).  
 
 You should now be able to run `pistis` from the command line
 ```sh
