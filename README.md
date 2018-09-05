@@ -15,8 +15,6 @@ mind, but there is no reason why PacBio reads can't be used.
 
 ## Installation
 
-Installation is fairly straightforward
-
 ```sh
 pip3 install pistis
 ```
