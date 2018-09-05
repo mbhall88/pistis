@@ -10,7 +10,7 @@
 
 This package provides plotting designed to give you an idea of how your long read
 sequencing data looks. It was conceived of and developed with nanopore reads in
-mind, but there is not reason why PacBio reads can't be used.  
+mind, but there is no reason why PacBio reads can't be used.  
 
 
 ## Installation
