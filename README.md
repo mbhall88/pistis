@@ -187,7 +187,7 @@ for all the details.
 ## Credits
 
 * This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [`audreyr/cookiecutter-pypackage` project template](https://github.com/audreyr/cookiecutter-pypackage).  
-* The two test data files (fastq and BAM) that I have use in this repository were
+* The two test data files (fastq and BAM) that I have used in this repository were
 taken from [Wouter De Coster's `nanotest` repository](https://github.com/wdecoster/nanotest).
 * Which in turn comes from [Nick Loman and Josh Quick](http://lab.loman.net/2017/03/09/ultrareads-for-nanopore/).  
 * The example plots in this `README` were made using the entire fastq of basecalled
