@@ -31,7 +31,7 @@ pistis --help
 
 ## Usage
 
-The main use case for `pistis` is as a command-line interface (CLI), but can also be
+The main use case for `pistis` is as a command-line interface (CLI), but it can also be
 used in an interactive way, such as with a [Jupyter Notebook](https://jupyter.org/).  
 
 #### CLI Usage
