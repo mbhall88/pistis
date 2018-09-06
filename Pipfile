@@ -9,7 +9,6 @@ pysam = "*"
 matplotlib = "<=2.2.2"
 click = "*"
 seaborn = "*"
-"5ad110a" = {editable = true, path = "/Users/mbhall88/Downloads/pysam"}
 
 [dev-packages]
 bumpversion = "==0.5.3"
