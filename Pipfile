@@ -1,22 +1,17 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 numpy = "*"
-"e1839a8" = {path = ".", editable = true}
 pysam = "*"
 matplotlib = "<=2.2.2"
 click = "*"
 seaborn = "*"
-
+"5ad110a" = {editable = true, path = "/Users/mbhall88/Downloads/pysam"}
 
 [dev-packages]
-
 bumpversion = "==0.5.3"
 watchdog = "==0.8.3"
 "flake8" = "==3.5.0"
@@ -25,6 +20,6 @@ coverage = "==4.5.1"
 sphinx = "==1.7.0"
 pytest = "*"
 pytest-runner = "==2.11.1"
-"e1839a8" = {path = ".", editable = true}
 nose = "*"
 jupyter = "*"
+pistis = {editable = true, path = "."}
