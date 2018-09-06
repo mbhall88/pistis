@@ -10,7 +10,7 @@ name = "pypi"
 numpy = "*"
 "e1839a8" = {path = ".", editable = true}
 pysam = "*"
-matplotlib = "*"
+matplotlib = "<=2.2.2"
 click = "*"
 seaborn = "*"
 
