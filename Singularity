@@ -43,5 +43,6 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
     pip3 install .
 
 %test
+    NAME="pistis"
     command -v "$NAME" >/dev/null 2>&1 || \
         { echo >&2 "I require $NAME but it's not installed.  Aborting."; exit 1; }
