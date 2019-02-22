@@ -31,6 +31,16 @@ You should now be able to run `pistis` from the command line
 pistis --help
 ```
 
+### Singularity
+
+There is a built image maintained with this repository that can be used. For the latest release you can use the URI `shub://mbhall88/pistis`  
+For example
+
+```sh
+singularity exec "shub://mbhall88/pistis" pistis --help
+singularity pull --name pistis.simg "shub://mbhall88/pistis"
+```
+
 ## Usage
 
 The main use case for `pistis` is as a command-line interface (CLI), but it can also be
