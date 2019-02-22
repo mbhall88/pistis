@@ -6,7 +6,9 @@
 [![PyPI status](https://img.shields.io/pypi/v/pistis.svg)](https://pypi.python.org/pypi/pistis)
 [![Build Status](https://travis-ci.org/mbhall88/pistis.svg?branch=master)](https://travis-ci.org/mbhall88/pistis)
 [![GitHub license](https://img.shields.io/github/license/mbhall88/pistis.svg)](https://github.com/mbhall88/pistis/blob/master/LICENSE)
-[![Twitter Follow](https://img.shields.io/twitter/follow/mbhall88.svg?style=social&logo=twitter&label=Follow)](https://twitter.com/mbhall88)  
+[![Twitter Follow](https://img.shields.io/twitter/follow/mbhall88.svg?style=social&logo=twitter&label=Follow)](https://twitter.com/mbhall88)    
+[![https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg](https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg)](https://singularity-hub.org/collections/2402)
+
 
 This package provides plotting designed to give you an idea of how your long read
 sequencing data looks. It was conceived of and developed with nanopore reads in
@@ -83,10 +85,10 @@ Options:
   -h, --help                      Show this message and exit.
 ```
 
-Note the `--downsample` option is set to 50000 by default. That is, `pistis` will 
-only plot 50000 reads (sampled from a uniform distribution). You can set this to 
-0 if you want to plot every read, or select another number of your choosing. Be aware 
-that if you try to plot too many reads you may run into memory issues, so try 
+Note the `--downsample` option is set to 50000 by default. That is, `pistis` will
+only plot 50000 reads (sampled from a uniform distribution). You can set this to
+0 if you want to plot every read, or select another number of your choosing. Be aware
+that if you try to plot too many reads you may run into memory issues, so try
 downsampling if this happens.  
 
 There are three different use cases - currently - for producing plots:  
