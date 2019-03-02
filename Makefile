@@ -54,13 +54,13 @@ init: ## install pi
 	pip install pipenv
 	pipenv install --dev --skip-lock
 
-lint: ## check style with flake8
-	flake8 pistis tests
+lint: ## check style with black
+	black --check --py36 pistis/ tests/
 
-test: ## run tests quickly with the default Python
+test: lint ## run tests quickly with the default Python
 	pipenv run pytest
 
-test-all: ## run tests on every Python version with tox
+test-all: lint ## run tests on every Python version with tox
 	pipenv run tox
 
 coverage: ## check code coverage quickly with the default Python
@@ -80,11 +80,11 @@ docs: ## generate Sphinx HTML documentation, including API docs
 servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
-release: clean ## package and upload a release
+release: clean lint ## package and upload a release
 	python setup.py sdist upload
 	python setup.py bdist_wheel upload
 
-dist: clean  ## builds source and wheel package
+dist: clean lint ## builds source and wheel package
 	python setup.py sdist
 	twine upload -r pypi dist/`ls -t dist | head -1`
 	echo "Make sure you have synchronised README files with pandoc --from=markdown --to=rst --output=README.rst README.md"

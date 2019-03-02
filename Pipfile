@@ -5,15 +5,15 @@ name = "pypi"
 
 [packages]
 numpy = "*"
-pysam = "*"
+pysam = ">=0.15"
 matplotlib = "*"
 click = "*"
 seaborn = "*"
+cython = "*"
 
 [dev-packages]
 bumpversion = "==0.5.3"
 watchdog = "==0.8.3"
-"flake8" = "==3.5.0"
 tox = "*"
 coverage = "==4.5.1"
 sphinx = "==1.7.0"
@@ -21,4 +21,8 @@ pytest = "*"
 pytest-runner = "==2.11.1"
 nose = "*"
 jupyter = "*"
-pistis = {editable = true, path = "."}
+pistis = {editable = true,path = "."}
+black = "*"
+
+[pipenv]
+allow_prereleases = true

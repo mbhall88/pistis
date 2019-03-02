@@ -7,15 +7,30 @@ import os
 import re
 import pysam
 import random
-from typing import List, Tuple, Iterable, NewType, Dict
+from typing import List, Tuple, Iterable, NewType
 from collections import OrderedDict, Counter
 import numpy as np
 from six.moves import zip
 
-Sam = NewType('Sam', pysam.AlignedSegment)
+Sam = NewType("Sam", pysam.AlignedSegment)
 
-BIN_NAMES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11-20',
-             '21-50', '51-100', '101-200', '201-300']
+BIN_NAMES = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11-20",
+    "21-50",
+    "51-100",
+    "101-200",
+    "201-300",
+]
 BIN_STARTS = np.append(np.arange(11), np.array([21, 51, 101, 201, 301]))
 
 
@@ -54,10 +69,9 @@ def collect_fastq_data(fastq, downsample=0):
         q_scores = record.get_quality_array()
         mean_quality_scores.append(sum(q_scores) / length)
         # bin the quality scores for the read from start and end by position
-        for i, (start_idx, bin_name) in enumerate(zip(BIN_STARTS[:-1],
-                                                      BIN_NAMES)):
-            slice_from_start = q_scores[start_idx: BIN_STARTS[i + 1]]
-            slice_from_end = q_scores[-BIN_STARTS[i + 1]: -start_idx or None]
+        for i, (start_idx, bin_name) in enumerate(zip(BIN_STARTS[:-1], BIN_NAMES)):
+            slice_from_start = q_scores[start_idx : BIN_STARTS[i + 1]]
+            slice_from_end = q_scores[-BIN_STARTS[i + 1] : -start_idx or None]
             bins_from_start[bin_name].extend(slice_from_start)
             bins_from_end[bin_name].extend(slice_from_end)
 
@@ -68,14 +82,20 @@ def collect_fastq_data(fastq, downsample=0):
         bins_from_start = _downsample_dict(bins_from_start, downsample)
         bins_from_end = _downsample_dict(bins_from_end, downsample)
 
-    return (gc_content_list, read_lengths, mean_quality_scores,
-            bins_from_start, bins_from_end)
+    return (
+        gc_content_list,
+        read_lengths,
+        mean_quality_scores,
+        bins_from_start,
+        bins_from_end,
+    )
 
 
-collect_fastq_data.__annotations__ = {'fastq': Iterable, 'downsample': int,
-                                      'return': Tuple[List[float], List[int],
-                                                      List[float], OrderedDict,
-                                                      OrderedDict]}
+collect_fastq_data.__annotations__ = {
+    "fastq": Iterable,
+    "downsample": int,
+    "return": Tuple[List[float], List[int], List[float], OrderedDict, OrderedDict],
+}
 
 
 def _downsample_list(full_list, num_samples):
@@ -94,8 +114,11 @@ def _downsample_list(full_list, num_samples):
     return random.sample(full_list, k=num_samples)
 
 
-_downsample_list.__annotations__ = {'full_list': list, 'num_samples': int,
-                                    'returns': list}
+_downsample_list.__annotations__ = {
+    "full_list": list,
+    "num_samples": int,
+    "returns": list,
+}
 
 
 def _downsample_dict(full_dict, num_samples):
@@ -120,8 +143,11 @@ def _downsample_dict(full_dict, num_samples):
     return downsampled_dict
 
 
-_downsample_dict.__annotations__ = {'full_dict': dict, 'num_samples': int,
-                                    'returns': dict}
+_downsample_dict.__annotations__ = {
+    "full_dict": dict,
+    "num_samples": int,
+    "returns": dict,
+}
 
 
 def sam_percent_identity(filename, downsample=0):
@@ -138,7 +164,7 @@ def sam_percent_identity(filename, downsample=0):
     """
     # get pysam read option depending on whether file is sam or bam
     file_ext = os.path.splitext(filename)[-1]
-    read_opt = 'rb' if file_ext == '.bam' else 'r'
+    read_opt = "rb" if file_ext == ".bam" else "r"
 
     # open file
     samfile = pysam.AlignmentFile(filename, read_opt)
@@ -146,9 +172,7 @@ def sam_percent_identity(filename, downsample=0):
     perc_identities = []
     for record in samfile:
         # make sure read is mapped, and is not a suppl. or secondary alignment
-        if (record.is_unmapped or
-                record.is_supplementary or
-                record.is_secondary):
+        if record.is_unmapped or record.is_supplementary or record.is_secondary:
             continue
         pid = get_percent_identity(record)
         if pid:
@@ -160,8 +184,11 @@ def sam_percent_identity(filename, downsample=0):
     return perc_identities
 
 
-sam_percent_identity.__annotations__ = {'filename': str, 'downsample': int,
-                                        'return': List[float]}
+sam_percent_identity.__annotations__ = {
+    "filename": str,
+    "downsample": int,
+    "return": List[float],
+}
 
 
 def get_percent_identity(read):
@@ -179,9 +206,9 @@ def get_percent_identity(read):
     except KeyError:
         try:
             return 100 * (
-                    1 - (_parse_md_flag(read.get_tag("MD")) +
-                         _parse_cigar(read.cigartuples)) /
-                    read.query_alignment_length
+                1
+                - (_parse_md_flag(read.get_tag("MD")) + _parse_cigar(read.cigartuples))
+                / read.query_alignment_length
             )
         except KeyError:
             return None
@@ -189,12 +216,12 @@ def get_percent_identity(read):
         return None
 
 
-get_percent_identity.__annotations__ = {'read': Sam, 'return': float}
+get_percent_identity.__annotations__ = {"read": Sam, "return": float}
 
 
 def _parse_md_flag(md_list):
     """Parse MD string to get number of mismatches and deletions."""
-    return sum([len(item) for item in re.split('[0-9^]', md_list)])
+    return sum([len(item) for item in re.split("[0-9^]", md_list)])
 
 
 def _parse_cigar(cigartuples):
@@ -220,8 +247,8 @@ def gc_content(sequence, as_decimal=True):
     """
     gc_total = 0.0
     num_bases = 0.0
-    n_tuple = tuple('nN')
-    accepted_bases = tuple('cCgGsS')
+    n_tuple = tuple("nN")
+    accepted_bases = tuple("cCgGsS")
 
     # counter sums all unique characters in sequence. Case insensitive.
     for base, count in Counter(sequence).items():
@@ -241,5 +268,4 @@ def gc_content(sequence, as_decimal=True):
     return result
 
 
-gc_content.__annotations__ = {'sequence': str, 'as_decimal': bool,
-                              'return': float}
+gc_content.__annotations__ = {"sequence": str, "as_decimal": bool, "return": float}

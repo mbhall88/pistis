@@ -5,7 +5,8 @@ from __future__ import absolute_import
 from typing import List
 import collections
 import matplotlib
-matplotlib.use('Agg')
+
+matplotlib.use("Agg")
 import seaborn as sns
 import numpy as np
 from matplotlib import pyplot as plt
@@ -28,9 +29,9 @@ def gc_plot(gc_content):
 
     """
     bins = 100
-    xlabel = 'GC content'
-    ylabel = 'Proportion of reads'
-    title = 'GC content of each read'
+    xlabel = "GC content"
+    ylabel = "Proportion of reads"
+    title = "GC content of each read"
     # set the x-axis limits based on whether data is decimal or percentage
     xlim = (0, 100) if any(x > 1 for x in gc_content) else (0, 1.0)
 
@@ -44,12 +45,10 @@ def gc_plot(gc_content):
     return fig
 
 
-gc_plot.__annotations__ = {'gc_content': List[float],
-                           'return': plt.Figure}
+gc_plot.__annotations__ = {"gc_content": List[float], "return": plt.Figure}
 
 
-def length_vs_qual_plot(lengths, quality_scores, kind='scatter',
-                        log_length=True):
+def length_vs_qual_plot(lengths, quality_scores, kind="scatter", log_length=True):
     """Generates a plot of the read length against quality score for each read.
 
     Args:
@@ -65,10 +64,11 @@ def length_vs_qual_plot(lengths, quality_scores, kind='scatter',
         A matplotlib figure object containing the plot.
     """
     # use slightly different plot styling for this plot compared to the others
-    with sns.axes_style('whitegrid',
-                        rc={"grid.linewidth": 0.25, 'grid.linestyle': '--'}):
-        xlabel = 'Read Length (bp)'
-        ylabel = 'Phred quality score'
+    with sns.axes_style(
+        "whitegrid", rc={"grid.linewidth": 0.25, "grid.linestyle": "--"}
+    ):
+        xlabel = "Read Length (bp)"
+        ylabel = "Phred quality score"
 
         # jointplot require numpy array
         x_data = np.array(lengths)
@@ -80,7 +80,7 @@ def length_vs_qual_plot(lengths, quality_scores, kind='scatter',
         plot = sns.jointplot(x=x_data, y=y_data, kind=kind, space=0, size=3)
 
         # change the alpha of the scatter points
-        if kind == 'scatter':
+        if kind == "scatter":
             plot.ax_joint.cla()
             plot.ax_joint.scatter(x_data, y_data, alpha=0.15)
 
@@ -92,11 +92,23 @@ def length_vs_qual_plot(lengths, quality_scores, kind='scatter',
         plot.ax_joint.set_yticklabels(quality_ticks)
 
         if log_length:  # format x-axis labels and ticks for log data
-            log_ticks = [500, 1e3, 3e3, 5e3, 1e4, 3e4, 5e4, 1e5, 3e5, 5e5, 1e6,
-                         1.5e6, 2e6]
+            log_ticks = [
+                500,
+                1e3,
+                3e3,
+                5e3,
+                1e4,
+                3e4,
+                5e4,
+                1e5,
+                3e5,
+                5e5,
+                1e6,
+                1.5e6,
+                2e6,
+            ]
             plot.ax_joint.set_xticks(np.log10(log_ticks))
-            plot.ax_joint.set_xticklabels(list(map(int, log_ticks)),
-                                          rotation=270)
+            plot.ax_joint.set_xticklabels(list(map(int, log_ticks)), rotation=270)
 
         # make sure the marginal axes align with the jointplot
         plot.ax_marg_x.set_xlim(plot.ax_joint.get_xlim())
@@ -107,14 +119,16 @@ def length_vs_qual_plot(lengths, quality_scores, kind='scatter',
     return plot.fig
 
 
-length_vs_qual_plot.__annotations__ = {'lengths': List[int],
-                                       'quality_scores': List[float],
-                                       'kind': str,
-                                       'log_length': bool,
-                                       'return': plt.Figure}
+length_vs_qual_plot.__annotations__ = {
+    "lengths": List[int],
+    "quality_scores": List[float],
+    "kind": str,
+    "log_length": bool,
+    "return": plt.Figure,
+}
 
 
-def quality_per_position(data, from_end='start'):
+def quality_per_position(data, from_end="start"):
     """Generate a box plot of quality scores across positions in all reads.
     Each box in the plot corresponds to a 'bin'. That is, all quality scores
     at that position (or positions if it is a range) across all reads.
@@ -127,19 +141,21 @@ def quality_per_position(data, from_end='start'):
     Returns:
         A matplotlib figure object containing the plot.
     """
-    if from_end.lower() == 'start':
+    if from_end.lower() == "start":
         col_names = list(data.keys())
         values = list(data.values())
-    elif from_end.lower() == 'end':
+    elif from_end.lower() == "end":
         col_names = list(data.keys())[::-1]
         values = list(data.values())[::-1]
     else:
-        raise Exception("'start' and 'end' are the only options allowed for "
-                        "plotting quality per position.")
+        raise Exception(
+            "'start' and 'end' are the only options allowed for "
+            "plotting quality per position."
+        )
 
-    title = 'Quality score across reads, from the {}'.format(from_end)
-    xlabel = 'Read position (bp)'
-    ylabel = 'Phred Quality Score'
+    title = "Quality score across reads, from the {}".format(from_end)
+    xlabel = "Read position (bp)"
+    ylabel = "Phred Quality Score"
 
     fig, axes = plt.subplots(figsize=FIGURE_SIZE, dpi=DPI)
     plot = sns.boxplot(data=values, ax=axes, linewidth=0.5)
@@ -150,9 +166,11 @@ def quality_per_position(data, from_end='start'):
     return fig
 
 
-quality_per_position.__annotations__ = {'data': collections.OrderedDict,
-                                        'from_end': str,
-                                        'return': plt.Figure}
+quality_per_position.__annotations__ = {
+    "data": collections.OrderedDict,
+    "from_end": str,
+    "return": plt.Figure,
+}
 
 
 def percent_identity(perc_indentities):
@@ -165,30 +183,29 @@ def percent_identity(perc_indentities):
         A matplotlib figure object containing the plot.
     """
     bins = 100
-    xlabel = 'Read percent identity'
-    ylabel = 'Proportion of reads'
-    title = 'Read alignment percent identity'
+    xlabel = "Read percent identity"
+    ylabel = "Proportion of reads"
+    title = "Read alignment percent identity"
 
     fig, axes = plt.subplots(dpi=DPI, figsize=FIGURE_SIZE)
     plot = sns.distplot(perc_indentities, bins=bins, ax=axes)
 
     # add a vertical dashed line at the median
     median = np.median(perc_indentities)
-    plt.plot([median] * 2, [0, 1], linewidth=2, c='r', alpha=0.75,
-             linestyle='--')
+    plt.plot([median] * 2, [0, 1], linewidth=2, c="r", alpha=0.75, linestyle="--")
     xticks = plot.get_xticks().tolist()[1:-1]
     xticks.append(median.round(2))
     xticks.sort()
-    plot.set(xlabel=xlabel, ylabel=ylabel, title=title, xticks=xticks,
-             xticklabels=xticks)
+    plot.set(
+        xlabel=xlabel, ylabel=ylabel, title=title, xticks=xticks, xticklabels=xticks
+    )
     # remove top and right border of plot
     sns.despine()
 
     return fig
 
 
-percent_identity.__annotations__ = {'gc_content': List[float],
-                                    'return': plt.Figure}
+percent_identity.__annotations__ = {"gc_content": List[float], "return": plt.Figure}
 
 
 def save_plots_to_pdf(plots, filename):
@@ -207,6 +224,8 @@ def save_plots_to_pdf(plots, filename):
     pdf_doc.close()
 
 
-save_plots_to_pdf.__annotations__ = {'plots': List[plt.Figure],
-                                     'filename': str,
-                                     'return': None}
+save_plots_to_pdf.__annotations__ = {
+    "plots": List[plt.Figure],
+    "filename": str,
+    "return": None,
+}

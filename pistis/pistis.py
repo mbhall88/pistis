@@ -7,45 +7,63 @@ from __future__ import absolute_import
 import os
 import pysam
 import matplotlib
-matplotlib.use('Agg')
+
+matplotlib.use("Agg")
 import seaborn as sns
 import click
 from pistis import utils, plots
 
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
-SEABORN_STYLE = 'whitegrid'
-REQUIRED_EXT = '.pdf'
+CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
+SEABORN_STYLE = "whitegrid"
+REQUIRED_EXT = ".pdf"
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
-@click.option('--fastq', '-f',
-              type=click.Path(exists=True, dir_okay=False,
-                              resolve_path=True),
-              help="Fastq file to plot. This can be gzipped.")
-@click.option('--output', '-o', default='.',
-              type=click.Path(dir_okay=True, resolve_path=True,
-                              writable=True),
-              help="Path to save the plot PDF as. If name is not specified,"
-                   " will use the name of the fastq (or bam) file with .pdf "
-                   "extension.")
-@click.option('--kind', '-k', default='kde',
-              type=click.Choice(['kde', 'scatter', 'hex']),
-              help="The kind of representation to use for the jointplot of "
-                   "quality score vs read length. Accepted kinds are 'scatter'"
-                   ", 'kde' (default), or 'hex'. For examples refer to "
-                   "https://seaborn.pydata.org/generated/seaborn.jointplot.html")
-@click.option('--log_length/--no_log_length', default=True,
-              help="Plot the read length as a log10 transformation on the "
-                   "quality vs read length plot")
-@click.option('--bam', '-b',
-              type=click.Path(exists=True, dir_okay=False, resolve_path=True),
-              help="SAM/BAM file to produce read percent identity histogram "
-                   "from.")
-@click.option('--downsample', '-d',
-              type=int,
-              default=50000,
-              help="Down-sample the sequence files to a given number of reads. "
-                   "Set to 0 for no subsampling. Default: 50000")
+@click.option(
+    "--fastq",
+    "-f",
+    type=click.Path(exists=True, dir_okay=False, resolve_path=True),
+    help="Fastq file to plot. This can be gzipped.",
+)
+@click.option(
+    "--output",
+    "-o",
+    default=".",
+    type=click.Path(dir_okay=True, resolve_path=True, writable=True),
+    help="Path to save the plot PDF as. If name is not specified,"
+    " will use the name of the fastq (or bam) file with .pdf "
+    "extension.",
+)
+@click.option(
+    "--kind",
+    "-k",
+    default="kde",
+    type=click.Choice(["kde", "scatter", "hex"]),
+    help="The kind of representation to use for the jointplot of "
+    "quality score vs read length. Accepted kinds are 'scatter'"
+    ", 'kde' (default), or 'hex'. For examples refer to "
+    "https://seaborn.pydata.org/generated/seaborn.jointplot.html",
+)
+@click.option(
+    "--log_length/--no_log_length",
+    default=True,
+    help="Plot the read length as a log10 transformation on the "
+    "quality vs read length plot",
+)
+@click.option(
+    "--bam",
+    "-b",
+    type=click.Path(exists=True, dir_okay=False, resolve_path=True),
+    help="SAM/BAM file to produce read percent identity histogram " "from.",
+)
+@click.option(
+    "--downsample",
+    "-d",
+    type=int,
+    default=50000,
+    help="Down-sample the sequence files to a given number of reads. "
+    "Set to 0 for no subsampling. Default: 50000",
+)
 def main(fastq, output, kind, log_length, bam, downsample):
     """A package for sanity checking (quality control) your long read data.
         Feed it a fastq file and in return you will receive a PDF with four plots:\n
@@ -59,8 +77,9 @@ def main(fastq, output, kind, log_length, bam, downsample):
     identity will be added to the report.
     """
     if not any([fastq, bam]):
-        raise click.MissingParameter("Either --fastq, --bam or both must be "
-                                     "given as arguments.")
+        raise click.MissingParameter(
+            "Either --fastq, --bam or both must be " "given as arguments."
+        )
     sns.set(style=SEABORN_STYLE)
 
     # if the specified output is a directory, default pdf name is fastq name.
@@ -68,7 +87,7 @@ def main(fastq, output, kind, log_length, bam, downsample):
         # get the basename of the fastq file and add pdf extension
         basename, ext = os.path.splitext(os.path.basename(fastq or bam))
         # if file is gzipped, need to also strip fastq extension
-        if ext == '.gz':
+        if ext == ".gz":
             basename = os.path.splitext(os.path.basename(basename))[0]
 
         filename = basename + REQUIRED_EXT
@@ -84,20 +103,25 @@ def main(fastq, output, kind, log_length, bam, downsample):
     if fastq:
         with pysam.FastxFile(fastq) as fastq_file:
             # collect the data needed for plotting
-            (gc_content,
-             read_lengths,
-             mean_quality_scores,
-             bins_from_start,
-             bins_from_end) = utils.collect_fastq_data(fastq_file, downsample)
+            (
+                gc_content,
+                read_lengths,
+                mean_quality_scores,
+                bins_from_start,
+                bins_from_end,
+            ) = utils.collect_fastq_data(fastq_file, downsample)
 
         # generate plots
-        plots_for_report.extend([
-            plots.gc_plot(gc_content),
-            plots.length_vs_qual_plot(read_lengths, mean_quality_scores,
-                                      log_length=log_length, kind=kind),
-            plots.quality_per_position(bins_from_start, 'start'),
-            plots.quality_per_position(bins_from_end, 'end')
-        ])
+        plots_for_report.extend(
+            [
+                plots.gc_plot(gc_content),
+                plots.length_vs_qual_plot(
+                    read_lengths, mean_quality_scores, log_length=log_length, kind=kind
+                ),
+                plots.quality_per_position(bins_from_start, "start"),
+                plots.quality_per_position(bins_from_end, "end"),
+            ]
+        )
     if bam:
         # generate read percent identity plot
         perc_identities = utils.sam_percent_identity(bam, downsample)
@@ -108,11 +132,13 @@ def main(fastq, output, kind, log_length, bam, downsample):
     return 0
 
 
-main.__annotations__ = {'fastq': click.Path,
-                        'output': click.Path,
-                        'kind': str,
-                        'log_length': bool,
-                        'return': int}
+main.__annotations__ = {
+    "fastq": click.Path,
+    "output": click.Path,
+    "kind": str,
+    "log_length": bool,
+    "return": int,
+}
 
 if __name__ == "__main__":
     import sys
