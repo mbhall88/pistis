@@ -1,5 +1,7 @@
 # Pistis
 
+**This repository is now deprecated and I would recommend the great packages [NanoPlot](https://github.com/wdecoster/NanoPlot) or [pycoQC](https://github.com/a-slide/pycoQC).**
+
 
 ### Quality control plotting for long reads.
 
